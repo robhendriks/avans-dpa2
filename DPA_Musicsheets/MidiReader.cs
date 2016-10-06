@@ -26,7 +26,10 @@ namespace DPA_Musicsheets
                 Track track = sequence[i];
                 MidiTrack trackLog = new MidiTrack() { TrackName = i.ToString() };
 
-                foreach (var midiEvent in track.Iterator())
+                var midiEvents = track.Iterator();
+                var index = 0;
+
+                foreach (var midiEvent in midiEvents)
                 {
                     // Elke messagetype komt ook overeen met een class. Daarom moet elke keer gecast worden.
                     switch (midiEvent.MidiMessage.MessageType)
@@ -38,6 +41,13 @@ namespace DPA_Musicsheets
                             // 160 is centrale C op piano.
                             trackLog.Messages.Add(String.Format("Keycode: {0}, Command: {1}, absolute time: {2}, delta time: {3}"
                                 , channelMessage.Data1, channelMessage.Command, midiEvent.AbsoluteTicks, midiEvent.DeltaTicks));
+                            System.Diagnostics.Debug.WriteLine(channelMessage.Data2);
+
+                            var nextMidiEvent = midiEvents.ElementAt(i + 1);
+
+                            MusicNote note = MusicNoteFactory.Create(channelMessage, midiEvent, nextMidiEvent);
+
+
                             break;
                         case MessageType.SystemExclusive:
                             break;
@@ -58,6 +68,8 @@ namespace DPA_Musicsheets
                             trackLog.Messages.Add(String.Format("MidiEvent {0}, absolute ticks: {1}, deltaTicks: {2}", midiEvent.MidiMessage.MessageType, midiEvent.AbsoluteTicks, midiEvent.DeltaTicks));
                             break;
                     }
+
+                    index++;
                 }
 
                 yield return trackLog;

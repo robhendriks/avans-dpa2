@@ -66,7 +66,7 @@ namespace DPA_Musicsheets
                         viewer.AddMusicalSymbol(e); 
             */
 
-            staff.AddMusicalSymbol(new Note("A", 0, 4, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Start, NoteBeamType.Start }));
+            /*staff.AddMusicalSymbol(new Note("A", 0, 4, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Start, NoteBeamType.Start }));
             staff.AddMusicalSymbol(new Note("C", 1, 5, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Continue, NoteBeamType.End }));
             staff.AddMusicalSymbol(new Note("D", 0, 5, MusicalSymbolDuration.Eighth, NoteStemDirection.Down, NoteTieType.Start, new List<NoteBeamType>() { NoteBeamType.End }));
             staff.AddMusicalSymbol(new Barline());
@@ -82,7 +82,7 @@ namespace DPA_Musicsheets
             staff.AddMusicalSymbol(
                 new Note("G", 0, 4, MusicalSymbolDuration.Half, NoteStemDirection.Up, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Single })
                 { IsChordElement = true });
-            staff.AddMusicalSymbol(new Barline());
+            staff.AddMusicalSymbol(new Barline());*/
         }
 
         private void btnPlay_Click(object sender, RoutedEventArgs e)

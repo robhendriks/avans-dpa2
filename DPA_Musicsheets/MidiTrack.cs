@@ -11,10 +11,12 @@ namespace DPA_Musicsheets
     {
         public string TrackName { get; set; }
         public ObservableCollection<string> Messages { get; private set; }
+        public ObservableCollection<MusicNote> Notes { get; private set; }
 
         public MidiTrack()
         {
             this.Messages = new ObservableCollection<string>();
+            this.Notes = new ObservableCollection<MusicNote>();
         }
     }
 }
