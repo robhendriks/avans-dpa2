@@ -58,12 +58,14 @@ namespace DPA_Musicsheets.ViewModel
         public ICommand OpenCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
+        public ICommand ShowCommand { get; private set; }
 
         public MainViewModel()
         {
             OpenCommand = new RelayCommand(OnOpenCommand, CanOpen);
             PlayCommand = new RelayCommand(OnPlayCommand, CanPlay);
             StopCommand = new RelayCommand(OnStopCommand, CanStop);
+            ShowCommand = new RelayCommand(OnShowCommand, CanShow);
         }
 
         public bool CanOpen()
@@ -79,6 +81,11 @@ namespace DPA_Musicsheets.ViewModel
         public bool CanStop()
         {
             return Playing;
+        }
+
+        public bool CanShow()
+        {
+            return HasFilename;
         }
 
         public void OnOpenCommand()
@@ -102,6 +109,10 @@ namespace DPA_Musicsheets.ViewModel
                         Debug.WriteLine(pair);
                     }
                 }
+                else
+                {
+                    ShowCommand.Execute(null);
+                }
             }
         }
 
@@ -115,6 +126,13 @@ namespace DPA_Musicsheets.ViewModel
         {
             Playing = false;
             player.Stop();
+        }
+
+        public void OnShowCommand()
+        {
+            var reader = new MidiReader(FileName);
+
+
         }
     }
 }

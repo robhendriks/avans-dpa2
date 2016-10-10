@@ -69,10 +69,7 @@ namespace DPA_Musicsheets
                         case MessageType.Channel:
                             if (messageBuffer[0].Command == (ChannelCommand.NoteOn | ChannelCommand.NoteOff))
                             {
-                                //Debug.WriteLine($"@{i}\t<{msg.Command}>\t{msg.Data1}\t{msg.Data2}\t{midiEvent.AbsoluteTicks}\t@->{i + 1}");
-
                                 ParseChannelMessage(eventBuffer, messageBuffer);
-
                                 i += 2;
                                 continue;
                             }
@@ -85,8 +82,6 @@ namespace DPA_Musicsheets
 
                     i++;
                 }
-
-                Debug.WriteLine("IK BEN KLAAR. DOEI");
 
                 if (meta == null)
                 {
@@ -154,8 +149,8 @@ namespace DPA_Musicsheets
 
                 if (percentageOfWholeNote <= absoluteNoteLength) {
                     trackBuilder.Note(isRest
-                        ? new MusicNote(noteLength, messageBuffer[0].Data1, MusicNoteNote.Rest)
-                        : new MusicNote(noteLength, messageBuffer[0].Data1));
+                        ? MusicNoteFactory.Create(noteLength, messageBuffer[0].Data1, MusicNoteNote.Rest)
+                        : MusicNoteFactory.Create(noteLength, messageBuffer[0].Data1));
                     break;
                 }
             }

@@ -89,11 +89,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="LilyPond\LilyPondException.cs" />
+    <Compile Include="LilyPond\LilyPondHelper.cs" />
     <Compile Include="LilyPond\LilyPondLexer.cs" />
     <Compile Include="LilyPond\LilyPondParser.cs" />
+    <Compile Include="Midi\MidiHelper.cs" />
     <Compile Include="Midi\MidiLoadException.cs" />
     <Compile Include="Music\MusicMeta.cs" />
     <Compile Include="Music\MusicMetaBuilder.cs" />
+    <Compile Include="Music\MusicNoteFactory.cs" />
     <Compile Include="Music\MusicTrackBuilder.cs" />
     <Compile Include="Music\MusicPlayer.cs" />
     <Compile Include="Utility\Range.cs" />

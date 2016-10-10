@@ -22,6 +22,9 @@
                 <Button Command="{Binding PlayCommand}" Content="Play"/>
                 <Button Command="{Binding StopCommand}" Content="Stop"/>
             </ToolBar>
+            <ToolBar>
+                <Button Command="{Binding ShowCommand}" Content="Show"/>
+            </ToolBar>
         </ToolBarTray>
 
         <Grid Grid.Row="1">

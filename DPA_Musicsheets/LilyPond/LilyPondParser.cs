@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DPA_Musicsheets.Music;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace DPA_Musicsheets.LilyPond
         private int tokenIndex;
 
         private string parameterName;
+
+        public MusicNote RelativeNote { get; private set; } // Starts at Octave 5!!!
+        public List<MusicNote> Notes { get; private set; }
 
         public Dictionary<string, string> Parameters { get; private set; }
 
@@ -31,6 +35,7 @@ namespace DPA_Musicsheets.LilyPond
         private void Parse()
         {
             Parameters = new Dictionary<string, string>();
+            Notes = new List<MusicNote>();
 
             tokens = lexer.Tokens.ToArray();
             tokenCount = tokens.Length;
@@ -72,6 +77,8 @@ namespace DPA_Musicsheets.LilyPond
             {
                 throw new LilyPondException($"Expected NOTE but was {token.Type}");
             }
+
+            RelativeNote = MusicNoteFactory.Create(token);
 
             // Peek at Curly Brace
             if ((token = Next()) == null)
