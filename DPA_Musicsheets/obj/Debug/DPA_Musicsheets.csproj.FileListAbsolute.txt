@@ -36,3 +36,6 @@ C:\Users\tlcfbeer\Source\Repos\DPA_Startup_Musicsheets\DPA_Musicsheets\obj\Debug
 C:\Users\tlcfbeer\Source\Repos\DPA_Startup_Musicsheets\DPA_Musicsheets\obj\Debug\DPA_Musicsheets.csproj.GenerateResource.Cache
 C:\Users\tlcfbeer\Source\Repos\DPA_Startup_Musicsheets\DPA_Musicsheets\obj\Debug\DPA_Musicsheets.exe
 C:\Users\tlcfbeer\Source\Repos\DPA_Startup_Musicsheets\DPA_Musicsheets\obj\Debug\DPA_Musicsheets.pdb
+C:\Users\Admin\Desktop\dpa\DPA_Musicsheets\bin\Debug\DPA_Musicsheets.exe.config
+C:\Users\Admin\Desktop\dpa\DPA_Musicsheets\obj\Debug\DPA_Musicsheets.exe
+C:\Users\Admin\Desktop\dpa\DPA_Musicsheets\obj\Debug\DPA_Musicsheets.pdb
