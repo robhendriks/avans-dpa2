@@ -3,6 +3,6 @@
     /* PUN INTENDED */
     public enum MusicNoteNote
     {
-        C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B
+        C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B, Rest
     }
 }

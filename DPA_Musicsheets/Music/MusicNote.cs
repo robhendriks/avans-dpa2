@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
-using Sanford.Multimedia.Midi;
 using System.Linq;
 using System.Collections.Generic;
 
 namespace DPA_Musicsheets
 {
-    /**
-     * Als Data2 == 90, NOTE_ON
-     * Als Data2 == 0, NOTE_OFF
-     * TODO: Check fo
-     */
     public class MusicNote
     {
         public static readonly IEnumerable<MusicNoteNote> Notes = Enum.GetValues(typeof(MusicNoteNote)).Cast<MusicNoteNote>();
@@ -19,16 +12,16 @@ namespace DPA_Musicsheets
         public int Octave { get; private set; }
         public MusicNoteNote Note { get; private set; }
 
-        public MusicNote(int length, int keycode)
+        public MusicNote(int length, int keycode, MusicNoteNote note)
         {
             Length = length;
             Octave = GetOctave(keycode);
-            Note = GetNote(keycode);
+            Note = note;
         }
 
-        public static int GetLength()
+        public MusicNote(int length, int keycode)
+            : this(length, keycode, GetNote(keycode))
         {
-            return -1;
         }
 
         public static int GetOctave(int keycode)

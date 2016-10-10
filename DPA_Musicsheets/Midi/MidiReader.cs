@@ -48,18 +48,30 @@ namespace DPA_Musicsheets
                 int i = 0;
                 while (i < count)
                 {
-                    var midiEvent = midiEvents.ElementAtOrDefault(i);
-                    var nextMidiEvent = midiEvents.ElementAtOrDefault(i + 1);
+                    var eventBuffer = new MidiEvent[3];
+                    for (int j = 0; j < 3; j++)
+                    {
+                        eventBuffer[j] = midiEvents.ElementAtOrDefault(i + j);
+                    }
 
-                    switch (midiEvent.MidiMessage.MessageType)
+                    var messageBuffer = new ChannelMessage[3];
+                    for (int j = 0; j < 3; j++)
+                    {
+                        messageBuffer[j] = eventBuffer[j]?.MidiMessage as ChannelMessage;
+                    }
+
+                    // eventBuffer[0] current
+                    // eventBuffer[1] next
+                    // eventBuffer[2] the next after next
+
+                    switch (eventBuffer[0].MidiMessage.MessageType)
                     {
                         case MessageType.Channel:
-                            var msg = midiEvent.MidiMessage as ChannelMessage;
-                            if (msg.Command == (ChannelCommand.NoteOn | ChannelCommand.NoteOff))
+                            if (messageBuffer[0].Command == (ChannelCommand.NoteOn | ChannelCommand.NoteOff))
                             {
                                 //Debug.WriteLine($"@{i}\t<{msg.Command}>\t{msg.Data1}\t{msg.Data2}\t{midiEvent.AbsoluteTicks}\t@->{i + 1}");
 
-                                ParseChannelMessage(midiEvent?.MidiMessage as ChannelMessage, midiEvent, nextMidiEvent);
+                                ParseChannelMessage(eventBuffer, messageBuffer);
 
                                 i += 2;
                                 continue;
@@ -67,7 +79,7 @@ namespace DPA_Musicsheets
 
                             break;
                         case MessageType.Meta:
-                            ParseMeta(midiEvent.MidiMessage as MetaMessage);
+                            ParseMeta(eventBuffer[0].MidiMessage as MetaMessage);
                             break;
                     }
 
@@ -119,14 +131,20 @@ namespace DPA_Musicsheets
             }
         }
 
-        private void ParseChannelMessage(ChannelMessage message, MidiEvent current, MidiEvent next)
+        private void ParseChannelMessage(MidiEvent[] eventBuffer, ChannelMessage[] messageBuffer)
         {
-            if (message == null || current == null || next == null)
+            if (eventBuffer[0] == null || messageBuffer[0] == null || eventBuffer[1] == null)
             {
                 return;
             }
 
-            double deltaTicks = next.AbsoluteTicks - current.AbsoluteTicks;
+            bool isRest = false;
+            if (messageBuffer[1] != null && messageBuffer[2] != null)
+            {
+                isRest = (eventBuffer[2].AbsoluteTicks - eventBuffer[1].AbsoluteTicks > 0);
+            }
+
+            double deltaTicks = eventBuffer[1].AbsoluteTicks - eventBuffer[0].AbsoluteTicks;
             double percentageOfBeatNote = deltaTicks / sequence.Division;
             double percentageOfWholeNote = (1.0 / meta.TimeSignature.B) * percentageOfBeatNote;
 
@@ -134,9 +152,10 @@ namespace DPA_Musicsheets
             {
                 double absoluteNoteLength = (1.0 / noteLength);
 
-                if (percentageOfWholeNote <= absoluteNoteLength)
-                {
-                    trackBuilder.Note(new MusicNote(noteLength, message.Data1));
+                if (percentageOfWholeNote <= absoluteNoteLength) {
+                    trackBuilder.Note(isRest
+                        ? new MusicNote(noteLength, messageBuffer[0].Data1, MusicNoteNote.Rest)
+                        : new MusicNote(noteLength, messageBuffer[0].Data1));
                     break;
                 }
             }
