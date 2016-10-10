@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DPA_Musicsheets.Midi;
+using Microsoft.Win32;
 using PSAMControlLibrary;
 using Sanford.Multimedia.Midi;
 using System;
@@ -50,20 +51,22 @@ namespace DPA_Musicsheets
             // Clef = sleutel
             staff.AddMusicalSymbol(new Clef(ClefType.GClef, 2));
             staff.AddMusicalSymbol(new TimeSignature(TimeSignatureType.Numbers, 4, 4));
-            /* 
-                The first argument of Note constructor is a string representing one of the following names of steps: A, B, C, D, E, F, G. 
-                The second argument is number of sharps (positive number) or flats (negative number) where 0 means no alteration. 
-                The third argument is the number of an octave. 
-                The next arguments are: duration of the note, stem direction and type of tie (NoteTieType.None if the note is not tied). 
-                The last argument is a list of beams. If the note doesn't have any beams, it must still have that list with just one 
-                    element NoteBeamType.Single (even if duration of the note is greater than eighth). 
+
+
+            /*
+                The first argument of Note constructor is a string representing one of the following names of steps: A, B, C, D, E, F, G.
+                The second argument is number of sharps (positive number) or flats (negative number) where 0 means no alteration.
+                The third argument is the number of an octave.
+                The next arguments are: duration of the note, stem direction and type of tie (NoteTieType.None if the note is not tied).
+                The last argument is a list of beams. If the note doesn't have any beams, it must still have that list with just one
+                    element NoteBeamType.Single (even if duration of the note is greater than eighth).
                     To make it clear how beamlists work, let's try to add a group of two beamed sixteenths and eighth:
                         Note s1 = new Note("A", 0, 4, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Start, NoteBeamType.Start});
                         Note s2 = new Note("C", 1, 5, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Continue, NoteBeamType.End });
                         Note e = new Note("D", 0, 5, MusicalSymbolDuration.Eighth, NoteStemDirection.Down, NoteTieType.None,new List<NoteBeamType>() { NoteBeamType.End });
                         viewer.AddMusicalSymbol(s1);
                         viewer.AddMusicalSymbol(s2);
-                        viewer.AddMusicalSymbol(e); 
+                        viewer.AddMusicalSymbol(e);
             */
 
             /*staff.AddMusicalSymbol(new Note("A", 0, 4, MusicalSymbolDuration.Sixteenth, NoteStemDirection.Down, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Start, NoteBeamType.Start }));
@@ -104,7 +107,7 @@ namespace DPA_Musicsheets
                 txt_MidiFilePath.Text = openFileDialog.FileName;
             }
         }
-        
+
         private void btn_Stop_Click(object sender, RoutedEventArgs e)
         {
             if (_player != null)
@@ -113,7 +116,18 @@ namespace DPA_Musicsheets
 
         private void btn_ShowContent_Click(object sender, RoutedEventArgs e)
         {
-            ShowMidiTracks(MidiReader.ReadMidi(txt_MidiFilePath.Text));
+            //ShowMidiTracks(MidiReader.ReadMidi(txt_MidiFilePath.Text));
+
+            try
+            {
+                new MidiReader(txt_MidiFilePath.Text);
+            }
+            catch(MidiLoadException ex)
+            {
+                MessageBox.Show($"ERROR: {ex.Message}", "ERROR");
+                Console.WriteLine(ex.StackTrace);
+            }
+
         }
 
         private void ShowMidiTracks(IEnumerable<MidiTrack> midiTracks)

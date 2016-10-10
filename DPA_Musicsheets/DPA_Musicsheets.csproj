@@ -68,7 +68,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MidiTrack.cs" />
+    <Compile Include="Midi\MidiLoadException.cs" />
+    <Compile Include="Midi\MidiTrack.cs" />
+    <Compile Include="Music\MusicMeta.cs" />
+    <Compile Include="Music\MusicMetaBuilder.cs" />
+    <Compile Include="Music\MusicTrackBuilder.cs" />
+    <Compile Include="Utility\Range.cs" />
+    <Compile Include="Utility\TimeSignature.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -83,11 +89,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MidiPlayer.cs" />
-    <Compile Include="MidiReader.cs" />
-    <Compile Include="MusicNote.cs" />
-    <Compile Include="MusicNoteFactory.cs" />
-    <Compile Include="MusicNoteNote.cs" />
+    <Compile Include="Midi\MidiPlayer.cs" />
+    <Compile Include="Midi\MidiReader.cs" />
+    <Compile Include="Music\MusicNote.cs" />
+    <Compile Include="Music\MusicNoteFactory.cs" />
+    <Compile Include="Music\MusicNoteNote.cs" />
+    <Compile Include="Music\MusicTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

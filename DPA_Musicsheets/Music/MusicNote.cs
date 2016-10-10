@@ -9,6 +9,7 @@ namespace DPA_Musicsheets
     /**
      * Als Data2 == 90, NOTE_ON
      * Als Data2 == 0, NOTE_OFF
+     * TODO: Check fo
      */
     public class MusicNote
     {
@@ -41,7 +42,7 @@ namespace DPA_Musicsheets
         {
             return Notes.ElementAt(keycode % 12);
         }
-        
+
         public override string ToString()
         {
             return "MusicNote{Length=" + Length

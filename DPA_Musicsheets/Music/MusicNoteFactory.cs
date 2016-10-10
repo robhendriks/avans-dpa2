@@ -19,6 +19,11 @@ namespace DPA_Musicsheets
             {
                 throw new ArgumentNullException(nameof(nextEvent));
             }
+
+            //double deltaTicks = nextEvent.AbsoluteTicks - currentEvent.AbsoluteTicks;
+            //double percentageOfBeatNote = deltaTicks / sequence.Division;
+            //double percentageOfWholeNote = (1.0 / staff.TimeSignature[1]) * percentageOfBeatNote;
+
             return new MusicNote(-999, message.Data1, message.Command);
         }
     }
