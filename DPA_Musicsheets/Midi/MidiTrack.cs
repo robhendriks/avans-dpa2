@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace DPA_Musicsheets
 {
@@ -15,8 +10,8 @@ namespace DPA_Musicsheets
 
         public MidiTrack()
         {
-            this.Messages = new ObservableCollection<string>();
-            this.Notes = new ObservableCollection<MusicNote>();
+            Messages = new ObservableCollection<string>();
+            Notes = new ObservableCollection<MusicNote>();
         }
     }
 }

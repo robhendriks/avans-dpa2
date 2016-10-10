@@ -19,13 +19,11 @@ namespace DPA_Musicsheets
         public int Octave { get; private set; }
         public MusicNoteNote Note { get; private set; }
 
-        public MusicNote(int length, int keycode, ChannelCommand command)
+        public MusicNote(int length, int keycode)
         {
             Length = length;
             Octave = GetOctave(keycode);
             Note = GetNote(keycode);
-
-            Debug.WriteLine(this);
         }
 
         public static int GetLength()

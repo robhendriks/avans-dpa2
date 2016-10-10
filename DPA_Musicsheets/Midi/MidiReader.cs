@@ -43,22 +43,38 @@ namespace DPA_Musicsheets
             {
                 trackBuilder = new MusicTrackBuilder();
                 var midiEvents = track.Iterator();
+                var count = midiEvents.Count();
 
-                var i = 0;
-                foreach (var midiEvent in midiEvents)
+                int i = 0;
+                while (i < count)
                 {
+                    var midiEvent = midiEvents.ElementAtOrDefault(i);
+                    var nextMidiEvent = midiEvents.ElementAtOrDefault(i + 1);
+
                     switch (midiEvent.MidiMessage.MessageType)
                     {
                         case MessageType.Channel:
-                            var nextMidiEvent = midiEvents.ElementAtOrDefault(i + 1);
-                            ParseChannelMessage(midiEvent?.MidiMessage as ChannelMessage, midiEvent, nextMidiEvent);
+                            var msg = midiEvent.MidiMessage as ChannelMessage;
+                            if (msg.Command == (ChannelCommand.NoteOn | ChannelCommand.NoteOff))
+                            {
+                                //Debug.WriteLine($"@{i}\t<{msg.Command}>\t{msg.Data1}\t{msg.Data2}\t{midiEvent.AbsoluteTicks}\t@->{i + 1}");
+
+                                ParseChannelMessage(midiEvent?.MidiMessage as ChannelMessage, midiEvent, nextMidiEvent);
+
+                                i += 2;
+                                continue;
+                            }
+
                             break;
                         case MessageType.Meta:
                             ParseMeta(midiEvent.MidiMessage as MetaMessage);
                             break;
                     }
+
                     i++;
                 }
+
+                Debug.WriteLine("IK BEN KLAAR. DOEI");
 
                 if (meta == null)
                 {
@@ -68,7 +84,10 @@ namespace DPA_Musicsheets
                 else
                 {
                     var newTrack = trackBuilder.Create();
-                    Debug.WriteLine(newTrack);
+                    foreach (var note in newTrack.Notes)
+                    {
+                        Debug.WriteLine(note);
+                    }
                 }
             }
         }
@@ -104,7 +123,6 @@ namespace DPA_Musicsheets
         {
             if (message == null || current == null || next == null)
             {
-                Debug.WriteLine("WAT IS DEZE ZOMAAAAR AFGELOPEN??!???!?");
                 return;
             }
 
@@ -112,14 +130,14 @@ namespace DPA_Musicsheets
             double percentageOfBeatNote = deltaTicks / sequence.Division;
             double percentageOfWholeNote = (1.0 / meta.TimeSignature.B) * percentageOfBeatNote;
 
-            var nootLeeength = 0;
-
             for (int noteLength = 32; noteLength >= 1; noteLength /= 2)
             {
                 double absoluteNoteLength = (1.0 / noteLength);
+
                 if (percentageOfWholeNote <= absoluteNoteLength)
                 {
-                    nootLeeength = noteLength;
+                    trackBuilder.Note(new MusicNote(noteLength, message.Data1));
+                    break;
                 }
             }
         }

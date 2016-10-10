@@ -92,7 +92,6 @@
     <Compile Include="Midi\MidiPlayer.cs" />
     <Compile Include="Midi\MidiReader.cs" />
     <Compile Include="Music\MusicNote.cs" />
-    <Compile Include="Music\MusicNoteFactory.cs" />
     <Compile Include="Music\MusicNoteNote.cs" />
     <Compile Include="Music\MusicTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

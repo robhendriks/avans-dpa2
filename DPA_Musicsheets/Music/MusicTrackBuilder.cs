@@ -13,13 +13,19 @@ namespace DPA_Musicsheets.Music
 
         public MusicTrackBuilder Name(string name)
         {
-            instance.Name = name ?? "Unknown";
+            if (name != null)
+            {
+                instance.Name = name;
+            }
             return this;
         }
 
-        public MusicTrackBuilder Note()
+        public MusicTrackBuilder Note(MusicNote note)
         {
-            // TODO
+            if (note != null)
+            {
+                instance.Notes.Add(note);
+            }
             return this;
         }
 
