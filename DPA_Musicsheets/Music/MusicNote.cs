@@ -7,6 +7,7 @@
         public MusicNoteNote Note { get; private set; }
         public bool IsRelative { get; set; }
         public bool HasBarLine { get; set; }
+        public bool HasTie { get; set; }
 
         public MusicNote(int length, int octave, MusicNoteNote note, bool isRelative = false)
         {

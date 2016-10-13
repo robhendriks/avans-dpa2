@@ -38,41 +38,84 @@ namespace DPA_Musicsheets.Utility
             }
             else
             {
-                NoteStemDirection direction = NoteStemDirection.Up;
-                NoteBeamType beamType = isPair(previousNote, note, nextNote);
-                if (baseNote != null)
-                {
-                    int baseOctave = baseNote.Octave;
-                    if (note.Octave <= baseOctave && LilyPond.LilyPondHelper.Compare(note.Note, MusicNoteNote.B) < 0)
-                    {
-                        direction = NoteStemDirection.Down;
-                    }
-                }
-
-                return new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, NoteTieType.Start, new List<NoteBeamType>() { beamType });
+                NoteStemDirection direction = determineDirection(baseNote, note);
+                NoteBeamType beamType = isPair(previousNote, note, nextNote, baseNote);
+                NoteTieType tieType = hasTie(previousNote, note, nextNote);
+                return new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, tieType, new List<NoteBeamType>() { beamType });
             }
         }
 
-        public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote)
+        private static  NoteStemDirection determineDirection(MusicNote baseNote, MusicNote note)
+        {
+            NoteStemDirection direction = NoteStemDirection.Up;
+            if (baseNote != null)
+            {
+                int baseOctave = baseNote.Octave;
+                if (note.Octave <= baseOctave && LilyPond.LilyPondHelper.Compare(note.Note, MusicNoteNote.B) < 0)
+                {
+                    direction = NoteStemDirection.Down;
+                }
+            }
+            return direction;
+        }
+
+        private static NoteTieType hasTie(MusicNote previousNote, MusicNote note, MusicNote nextNote)
+        {
+            NoteTieType tieType = NoteTieType.None;
+
+            if (note.HasTie && !previousNote.HasTie)
+            {
+                tieType = NoteTieType.Start;
+            }
+
+            if (note.HasTie && nextNote.HasTie)
+            {
+                tieType = NoteTieType.StopAndStartAnother;
+            }
+
+            if (!note.HasTie && previousNote.HasTie)
+            {
+                tieType = NoteTieType.Stop;
+            }
+
+            return tieType;
+        }
+
+
+        public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote, MusicNote baseNote)
         {
             NoteBeamType t = NoteBeamType.Single;
             if (currentNote.Length < 8) return t;
+            var dir = determineDirection(baseNote, currentNote);
 
             if (currentNote.Length == nextNote.Length)
             {
-                if (previousNote.Length == currentNote.Length)
+                if (previousNote.Length != currentNote.Length)
                 {
-                    t = NoteBeamType.Continue;
+                    //if (dir != determineDirection(baseNote, previousNote) &&
+                    //    dir == determineDirection(baseNote, nextNote))
+                    //{
+                        Debug.WriteLine("Start");
+                        t = NoteBeamType.Start;
+                    //}
                 }
                 else
                 {
-                    t = NoteBeamType.Start;
+                    Debug.WriteLine("Continue");
+                    t = NoteBeamType.Continue;
                 }
             }
 
-            if (currentNote.Length ==  previousNote.Length && currentNote.Length != nextNote.Length)
+            if (currentNote.Length == previousNote.Length && currentNote.Length != nextNote.Length)
             {
-                t = NoteBeamType.End;
+                //if (determineDirection(baseNote, previousNote) == determineDirection(baseNote, currentNote) && determineDirection(baseNote, nextNote) == determineDirection(baseNote, currentNote))
+
+                //if (determineDirection(baseNote, previousNote) == dir && 
+                //    dir != determineDirection(baseNote, nextNote))
+                //{
+                    Debug.WriteLine("End");
+                    t = NoteBeamType.End;
+                //}
             }
 
             return t;

@@ -84,7 +84,7 @@ namespace DPA_Musicsheets.LilyPond
                 if (leftSteps == Notes.Length) break;
             }
 
-            //Debug.WriteLine($"[LEFT] FOUND {targetNoteNote} RELATIVE TO {sourceNoteNote} AFTER {leftSteps} STEP(S) AND {leftCycles} CYCLE(S)");
+           //WriteLine($"[LEFT] FOUND {targetNoteNote} RELATIVE TO {sourceNoteNote} AFTER {leftSteps} STEP(S) AND {leftCycles} CYCLE(S)");
 
             // Iterate right
             int right = baseIndex + 1;
