@@ -20,6 +20,11 @@ namespace DPA_Musicsheets
             HasBarLine = false;
         }
 
+        public void AddBarLine()
+        {
+            HasBarLine = true;
+        }
+
         public override string ToString()
         {
             return "MusicNote{Length=" + Length

@@ -99,6 +99,8 @@
     <Compile Include="Music\MusicNoteFactory.cs" />
     <Compile Include="Music\MusicTrackBuilder.cs" />
     <Compile Include="Music\MusicPlayer.cs" />
+    <Compile Include="Utility\Editor.cs" />
+    <Compile Include="Utility\Memento.cs" />
     <Compile Include="Utility\Range.cs" />
     <Compile Include="Utility\StringCollectionExtensions.cs" />
     <Compile Include="Utility\TimeSignature.cs" />

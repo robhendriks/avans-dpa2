@@ -106,14 +106,26 @@ namespace DPA_Musicsheets.LilyPond
                         BeginParameter();
                         break;
                     case "NOTE":
-
+                        AddMusicNote(token.Value);
                         break;
                     case "PIPE":
-
+                        //AddBarLine();
                         break;
                 }
             }
             tokenIndex--;
+        }
+
+        private void AddMusicNote(string note)
+        {
+           // MusicNote previousNote = Notes.ElementAt(Notes.Count - 1);
+
+            //TODO: Check which note & octave the current note is based on previous Note.
+        }
+
+        private void AddBarLine()
+        {
+            Notes.ElementAt(Notes.Count - 1).AddBarLine();
         }
 
         private void BeginParameter()
@@ -132,6 +144,8 @@ namespace DPA_Musicsheets.LilyPond
 
             string key = parameterName.TrimStart(new char[] {'\\'});
             string value = token.Value.Trim();
+
+            //TODO: Check for double keys. (multiple time commands?)
 
             Parameters.Add(key, value);
         }
