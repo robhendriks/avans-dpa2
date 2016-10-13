@@ -29,25 +29,6 @@ namespace DPA_Musicsheets.Utility
             { 1, MusicalSymbolDuration.Whole }
         };
 
-        public static MusicalSymbol test(int i)
-        {
-            if(i == 0)
-            {
-                return new Note("B", 0, 4, MusicalSymbolDuration.Eighth, NoteStemDirection.Up, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Start });
-            }
-            if (i == 2)
-            {
-                return new Note("B", 0, 4, MusicalSymbolDuration.Eighth, NoteStemDirection.Up, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.Continue });
-            }
-            if (i == 3)
-            {
-                return new Note("B", 0, 4, MusicalSymbolDuration.Eighth, NoteStemDirection.Up, NoteTieType.None, new List<NoteBeamType>() { NoteBeamType.End });
-            }
-            else
-            {
-                return new Note("B", 0, 4, MusicalSymbolDuration.Eighth, NoteStemDirection.Up, NoteTieType.Start, new List<NoteBeamType>() { NoteBeamType.Start });
-            }
-        }
 
         public static MusicalSymbol Create(MusicNote baseNote, MusicNote note, MusicNote nextNote, MusicNote previousNote)
         {
@@ -74,15 +55,11 @@ namespace DPA_Musicsheets.Utility
 
         public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote)
         {
-            // Debug.WriteLine("PREVIOUS: " + previousNote.Length + "\t CURRENT: " + currentNote.Length + "\t NEXT: "+ nextNote.Length);
-
             NoteBeamType t = NoteBeamType.Single;
-
             if (currentNote.Length < 8) return t;
 
             if (currentNote.Length == nextNote.Length)
             {
-                
                 if (previousNote.Length == currentNote.Length)
                 {
                     t = NoteBeamType.Continue;
