@@ -29,7 +29,6 @@ namespace DPA_Musicsheets.Utility
             { 1, MusicalSymbolDuration.Whole }
         };
 
-
         public static MusicalSymbol Create(MusicNote baseNote, MusicNote note, MusicNote nextNote, MusicNote previousNote)
         {
             if (note.Note == MusicNoteNote.Rest)
@@ -62,6 +61,10 @@ namespace DPA_Musicsheets.Utility
         private static NoteTieType hasTie(MusicNote previousNote, MusicNote note, MusicNote nextNote)
         {
             NoteTieType tieType = NoteTieType.None;
+            if (previousNote == null || nextNote == null)
+            {
+                return tieType;
+            }
 
             if (note.HasTie && !previousNote.HasTie)
             {
@@ -84,8 +87,13 @@ namespace DPA_Musicsheets.Utility
 
         public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote, MusicNote baseNote)
         {
-            NoteBeamType t = NoteBeamType.Single;
-            if (currentNote.Length < 8) return t;
+            NoteBeamType beamType = NoteBeamType.Single;
+            if (previousNote == null || nextNote == null)
+            {
+                return beamType;
+            }
+
+            if (currentNote.Length < 8) return beamType;
             var dir = determineDirection(baseNote, currentNote);
 
             if (currentNote.Length == nextNote.Length)
@@ -96,13 +104,13 @@ namespace DPA_Musicsheets.Utility
                     //    dir == determineDirection(baseNote, nextNote))
                     //{
                         Debug.WriteLine("Start");
-                        t = NoteBeamType.Start;
+                        beamType = NoteBeamType.Start;
                     //}
                 }
                 else
                 {
                     Debug.WriteLine("Continue");
-                    t = NoteBeamType.Continue;
+                    beamType = NoteBeamType.Continue;
                 }
             }
 
@@ -110,15 +118,15 @@ namespace DPA_Musicsheets.Utility
             {
                 //if (determineDirection(baseNote, previousNote) == determineDirection(baseNote, currentNote) && determineDirection(baseNote, nextNote) == determineDirection(baseNote, currentNote))
 
-                //if (determineDirection(baseNote, previousNote) == dir && 
+                //if (determineDirection(baseNote, previousNote) == dir &&
                 //    dir != determineDirection(baseNote, nextNote))
                 //{
                     Debug.WriteLine("End");
-                    t = NoteBeamType.End;
+                    beamType = NoteBeamType.End;
                 //}
             }
 
-            return t;
+            return beamType;
         }
 
         public static string GetNote(MusicNoteNote note)

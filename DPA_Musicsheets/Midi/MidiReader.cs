@@ -12,12 +12,26 @@ namespace DPA_Musicsheets
 {
     public class MidiReader
     {
+        private List<MusicNote> _notes = new List<MusicNote>();
+
+        public List<MusicNote> Notes
+        {
+            get { return _notes; }
+            private set { _notes = value; }
+        }
+
         private readonly Sequence sequence = new Sequence();
         private readonly MusicMetaBuilder metaBuilder = new MusicMetaBuilder();
 
         private MusicTrackBuilder trackBuilder;
 
-        private MusicMeta meta;
+        private MusicMeta _meta;
+
+        public MusicMeta Meta
+        {
+            get { return _meta; }
+            private set { _meta = value; }
+        }
 
         public MidiReader(string filename)
         {
@@ -83,18 +97,15 @@ namespace DPA_Musicsheets
                     i++;
                 }
 
-                if (meta == null)
+                if (Meta == null)
                 {
-                    meta = metaBuilder.Create();
-                    Debug.WriteLine(meta);
+                    Meta = metaBuilder.Create();
+                    Debug.WriteLine(Meta);
                 }
                 else
                 {
                     var newTrack = trackBuilder.Create();
-                    foreach (var note in newTrack.Notes)
-                    {
-                        Debug.WriteLine(note);
-                    }
+                    Notes.AddRange(newTrack.Notes);
                 }
             }
         }
@@ -141,7 +152,7 @@ namespace DPA_Musicsheets
 
             double deltaTicks = eventBuffer[1].AbsoluteTicks - eventBuffer[0].AbsoluteTicks;
             double percentageOfBeatNote = deltaTicks / sequence.Division;
-            double percentageOfWholeNote = (1.0 / meta.TimeSignature.B) * percentageOfBeatNote;
+            double percentageOfWholeNote = (1.0 / _meta.TimeSignature.B) * percentageOfBeatNote;
 
             for (int noteLength = 32; noteLength >= 1; noteLength /= 2)
             {

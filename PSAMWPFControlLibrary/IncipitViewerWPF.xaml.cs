@@ -66,6 +66,9 @@ namespace PSAMWPFControlLibrary
         private static readonly SolidColorBrush kw1 = (SolidColorBrush)new BrushConverter().ConvertFrom("#59ABE3");
         private static readonly SolidColorBrush kw2 = (SolidColorBrush)new BrushConverter().ConvertFrom("#81CFE0");
         private static readonly SolidColorBrush kw3 = (SolidColorBrush)new BrushConverter().ConvertFrom("#446CB3");
+        private static readonly SolidColorBrush kw4 = (SolidColorBrush)new BrushConverter().ConvertFrom("#913D88");
+        private static readonly SolidColorBrush kw5 = (SolidColorBrush)new BrushConverter().ConvertFrom("#BF55EC");
+        private static readonly SolidColorBrush kw6 = (SolidColorBrush)new BrushConverter().ConvertFrom("#BE90D4");
 
         #region Private fields
 
@@ -673,6 +676,7 @@ namespace PSAMWPFControlLibrary
 
             Pen pen = new Pen(scb, 1.0f);
             Pen beamPen = new Pen(scb, 2.0f);
+            Pen tiePen = new Pen(kw4, 2.0f);
             Pen linePen = new Pen(new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66)), 1.0f);
 
             float currentClefPositionY = 0;
@@ -1073,7 +1077,7 @@ namespace PSAMWPFControlLibrary
                                     180, false, SweepDirection.Clockwise, true);
                                 pf.Segments.Add(arcSeg);
                                 pathGeom.Figures.Add(pf);
-                                drawingContext.DrawGeometry(null, beamPen, pathGeom);
+                                drawingContext.DrawGeometry(null, tiePen, pathGeom);
                             }
                             else if (((Note)symbol).StemDirection == NoteStemDirection.Up)
                             {
@@ -1088,7 +1092,7 @@ namespace PSAMWPFControlLibrary
 
                                 pf.Segments.Add(arcSeg);
                                 pathGeom.Figures.Add(pf);
-                                drawingContext.DrawGeometry(null, beamPen, pathGeom);
+                                drawingContext.DrawGeometry(null, tiePen, pathGeom);
                             }
                             if (((Note)symbol).TieType == NoteTieType.StopAndStartAnother)
                             {
@@ -1325,21 +1329,21 @@ namespace PSAMWPFControlLibrary
 
                         float restPositionY = (lines[0] - 9);
 
-                        DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, scb, currentXPosition, restPositionY, 26.5f);
+                        DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, kw5, currentXPosition, restPositionY, 26.5f);
                         lastXPosition = currentXPosition;
 
                         //Draw number of measures for multimeasure rests / Rysuj ilość taktów dla pauz wielotaktowych:
                         if (((Rest)symbol).MultiMeasure > 1)
                         {
                             DrawString(drawingContext, Convert.ToString(((Rest)symbol).MultiMeasure),
-                                TypeFaces.LyricFontBold, scb, currentXPosition + 6, restPositionY, 0.8f);
+                                TypeFaces.LyricFontBold, kw5, currentXPosition + 6, restPositionY, 0.8f);
                         }
 
                         //Draw dots / Rysuj kropki:
                         if (((Rest)symbol).NumberOfDots > 0) currentXPosition += 16;
                         for (int i = 0; i < ((Rest)symbol).NumberOfDots; i++)
                         {
-                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, scb, currentXPosition, restPositionY, 26.5f);
+                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, kw5, currentXPosition, restPositionY, 26.5f);
                             currentXPosition += 6;
                         }
 

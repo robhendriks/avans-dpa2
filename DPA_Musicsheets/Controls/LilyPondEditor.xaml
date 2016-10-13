@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DPA_Musicsheets.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             x:Name="root">
     <UserControl.Resources>
         <local:BoolToColorConverter x:Key="converter"/>
 
@@ -15,25 +16,35 @@
         <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
         <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
 
-        <SolidColorBrush x:Key="validBrush" Color="{Binding Valid, Converter={StaticResource converter}}"/>
+        <SolidColorBrush x:Key="validBrush" />
     </UserControl.Resources>
 
     <UserControl.Background>
         <StaticResource ResourceKey="darkGrayBrush"/>
     </UserControl.Background>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
-        </Grid.RowDefinitions>
+    <Grid DataContext="{Binding ElementName=root}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="32"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBox Grid.Row="0" Background="Transparent" BorderThickness="0" AcceptsTab="True" AcceptsReturn="True">
-            <TextBox.Foreground>
-                <StaticResource ResourceKey="lightGrayBrush"/>
-            </TextBox.Foreground>
-        </TextBox>
+        <Rectangle Grid.Column="1">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{Binding Valid, Converter={StaticResource converter}}"/>
+            </Rectangle.Fill>
+        </Rectangle>
 
-        <Rectangle Grid.Row="1" Fill="{StaticResource validBrush}"/>
+        <ScrollViewer DataContext="{Binding ElementName=root}" Grid.Column="2">
+            <TextBox Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Background="Transparent" BorderThickness="0"
+                     AcceptsTab="True" AcceptsReturn="True"
+                     Margin="8 0 8 0">
+                <TextBox.Foreground>
+                    <StaticResource ResourceKey="lightGrayBrush"/>
+                </TextBox.Foreground>
+            </TextBox>
+        </ScrollViewer>
     </Grid>
 </UserControl>
