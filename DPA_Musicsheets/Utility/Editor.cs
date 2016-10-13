@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DPA_Musicsheets.Utility
+﻿namespace DPA_Musicsheets.Utility
 {
     class Editor
     {
@@ -14,7 +8,7 @@ namespace DPA_Musicsheets.Utility
 
         public Editor()
         {
-            
+
         }
 
         public void SetContent(string lilypondContent)
@@ -40,7 +34,7 @@ namespace DPA_Musicsheets.Utility
             {
                 LilypondContent = myMemento.LilypondContent;
             }
-            
+
         }
 
         public bool IsValidLilypond(string lilypondContent)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DPA_Musicsheets.LilyPond
 {
@@ -78,7 +79,7 @@ namespace DPA_Musicsheets.LilyPond
                 throw new LilyPondException($"Expected NOTE but was {token.Type}");
             }
 
-            RelativeNote = MusicNoteFactory.Create(token);
+            Notes.Add(MusicNoteFactory.Create(token));
 
             // Peek at Curly Brace
             if ((token = Next()) == null)
@@ -141,16 +142,35 @@ namespace DPA_Musicsheets.LilyPond
             }
         }
 
-        private void AddMusicNote(string note)
+        private void AddMusicNote(string str)
         {
-           // MusicNote previousNote = Notes.ElementAt(Notes.Count - 1);
-
             //TODO: Check which note & octave the current note is based on previous Note.
+
+            Regex regex = new Regex("([a-z])(is|es)?('|,)?([0-9]+)", RegexOptions.IgnoreCase);
+            var match = regex.Match(str);
+            if (match.Success)
+            {
+                var note = match.Groups[1].ToString();
+                var noteModifier = match.Groups[2].ToString();
+                var octaveModifier = match.Groups[3].ToString();
+                var noteLength = int.Parse(match.Groups[4].ToString());
+
+                var noteNote = LilyPondHelper.Create(note, noteModifier);
+
+                var previousNote = Notes[Notes.Count - 1];
+
+                var octave = LilyPondHelper.Octave(noteNote, octaveModifier, previousNote);
+                var nextNote = new MusicNote(noteLength, octave, noteNote);
+
+                Notes.Add(nextNote);
+
+            }
         }
 
         private void AddBarLine()
         {
-            Notes.ElementAt(Notes.Count - 1).AddBarLine();
+            /// HAHA OMG CHECK THIS OUT
+            Notes.ElementAt(Notes.Count - 1).HasBarLine = true;
         }
 
         private void BeginParameter()

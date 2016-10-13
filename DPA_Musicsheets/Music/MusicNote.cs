@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-
-namespace DPA_Musicsheets
+﻿namespace DPA_Musicsheets
 {
     public class MusicNote
     {
@@ -16,13 +12,7 @@ namespace DPA_Musicsheets
             Length = length;
             Octave = octave;
             Note = note;
-
             HasBarLine = false;
-        }
-
-        public void AddBarLine()
-        {
-            HasBarLine = true;
         }
 
         public override string ToString()
