@@ -124,6 +124,9 @@ namespace DPA_Musicsheets.LilyPond
                     case "PIPE":
                         AddBarLine();
                         break;
+                    case "TILDE":
+                        AddTie();
+                        break;
                     case "CURLY_OPEN":
                         SkipUntilCurlyBrace();
                         break;
@@ -191,6 +194,11 @@ namespace DPA_Musicsheets.LilyPond
         private void AddBarLine()
         {
             Notes.ElementAt(Notes.Count - 1).HasBarLine = true;
+        }
+
+        private void AddTie()
+        {
+            Notes.ElementAt(Notes.Count - 1).HasTie = true;
         }
 
         private void BeginParameter()

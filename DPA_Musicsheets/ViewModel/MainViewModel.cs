@@ -119,7 +119,6 @@ namespace DPA_Musicsheets.ViewModel
 
                     foreach (var pair in parser.Parameters)
                     {
-                        Debug.WriteLine(pair);
 
                         switch (pair.Key)
                         {
