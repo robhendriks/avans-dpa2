@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\BoolToColorConverter.cs" />
     <Compile Include="Controls\LilyPondEditor.xaml.cs">
       <DependentUpon>LilyPondEditor.xaml</DependentUpon>
     </Compile>

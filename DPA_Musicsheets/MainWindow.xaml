@@ -36,7 +36,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <c:LilyPondEditor Grid.Row="0" Margin="8"></c:LilyPondEditor>
+            <c:LilyPondEditor Grid.Row="0"></c:LilyPondEditor>
 
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 

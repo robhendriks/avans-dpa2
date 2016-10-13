@@ -6,20 +6,20 @@
              xmlns:local="clr-namespace:DPA_Musicsheets.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:BoolToColorConverter x:Key="converter"/>
+        <SolidColorBrush x:Key="validBrush" Color="{Binding Valid, Converter={StaticResource converter}}"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="2"/>
+            <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
 
-        <RichTextBox Grid.Row="0" BorderThickness="0">
+        <RichTextBox Grid.Row="0" Margin="8" BorderThickness="0">
 
         </RichTextBox>
 
-        <Rectangle Grid.Row="1">
-            <Rectangle.Fill>
-                <SolidColorBrush Color="{Binding Dero}"/>
-            </Rectangle.Fill>
-        </Rectangle>
+        <Rectangle Grid.Row="1" Fill="{StaticResource validBrush}"/>
     </Grid>
 </UserControl>
