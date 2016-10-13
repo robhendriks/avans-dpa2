@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="DPA_Musicsheets.Controls.LilyPondEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DPA_Musicsheets.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+        </Grid.RowDefinitions>
+
+        <RichTextBox Grid.Row="0" BorderThickness="0">
+
+        </RichTextBox>
+
+        <Rectangle Grid.Row="1">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="{Binding Dero}"/>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Grid>
+</UserControl>

@@ -83,10 +83,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\LilyPondEditor.xaml.cs">
+      <DependentUpon>LilyPondEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LilyPond\LilyPondException.cs" />
     <Compile Include="LilyPond\LilyPondHelper.cs" />
     <Compile Include="LilyPond\LilyPondLexer.cs" />
     <Compile Include="LilyPond\LilyPondParser.cs" />
+    <Compile Include="LilyPond\LilyPondToPDF.cs" />
     <Compile Include="Midi\MidiHelper.cs" />
     <Compile Include="Midi\MidiLoadException.cs" />
     <Compile Include="Music\MusicMeta.cs" />
@@ -96,11 +100,16 @@
     <Compile Include="Music\MusicPlayer.cs" />
     <Compile Include="Utility\Editor.cs" />
     <Compile Include="Utility\Memento.cs" />
+    <Compile Include="Music\MusicalSymbolFactory.cs" />
     <Compile Include="Utility\Range.cs" />
     <Compile Include="Utility\StringCollectionExtensions.cs" />
     <Compile Include="Utility\TimeSignature.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Page Include="Controls\LilyPondEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

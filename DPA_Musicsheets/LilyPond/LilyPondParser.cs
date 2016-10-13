@@ -35,6 +35,8 @@ namespace DPA_Musicsheets.LilyPond
 
         private void Parse()
         {
+            //TODO: Check if input is from Lexer or Editor.
+
             Parameters = new Dictionary<string, string>();
             Notes = new List<MusicNote>();
 
@@ -79,7 +81,9 @@ namespace DPA_Musicsheets.LilyPond
                 throw new LilyPondException($"Expected NOTE but was {token.Type}");
             }
 
-            Notes.Add(MusicNoteFactory.Create(token));
+            var relNote = MusicNoteFactory.Create(token);
+            relNote.IsRelative = true;
+            Notes.Add(relNote);
 
             // Peek at Curly Brace
             if ((token = Next()) == null)
@@ -118,7 +122,7 @@ namespace DPA_Musicsheets.LilyPond
                         AddMusicNote(token.Value);
                         break;
                     case "PIPE":
-                        //AddBarLine();
+                        AddBarLine();
                         break;
                     case "CURLY_OPEN":
                         SkipUntilCurlyBrace();
@@ -157,7 +161,7 @@ namespace DPA_Musicsheets.LilyPond
 
                 var noteNote = LilyPondHelper.Create(note, noteModifier);
 
-                var previousNote = Notes[Notes.Count - 1];
+                var previousNote = GetPrevious();
 
                 var octave = LilyPondHelper.Octave(noteNote, octaveModifier, previousNote);
                 var nextNote = new MusicNote(noteLength, octave, noteNote);
@@ -167,9 +171,25 @@ namespace DPA_Musicsheets.LilyPond
             }
         }
 
+        private MusicNote GetPrevious()
+        {
+            if (Notes.Count == 0)
+            {
+                return null;
+            }
+
+            int i = Notes.Count - 1;
+            MusicNote note = null;
+            while ((note = Notes[i]).Note == MusicNoteNote.Rest)
+            {
+                i--;
+                if (i < 0) break;
+            }
+            return note;
+        }
+
         private void AddBarLine()
         {
-            /// HAHA OMG CHECK THIS OUT
             Notes.ElementAt(Notes.Count - 1).HasBarLine = true;
         }
 

@@ -43,6 +43,14 @@ namespace DPA_Musicsheets.LilyPond
             return -1;
         }
 
+        public static int Compare(MusicNoteNote a, MusicNoteNote b)
+        {
+            int aIndex = Find(a);
+            int bIndex = Find(b);
+            if (aIndex == bIndex) return 0;
+            return (aIndex > bIndex ? 1 : -1);
+        }
+
         public static int FindNearest(MusicNoteNote sourceNoteNote, MusicNoteNote targetNoteNote)
         {
             int baseIndex = Find(sourceNoteNote);
@@ -63,7 +71,7 @@ namespace DPA_Musicsheets.LilyPond
                 left = Notes.Length - 1;
                 leftCycles++;
             }
-            
+
             while ((tmpNoteNote = Notes[left]) != targetNoteNote)
             {
                 left--;

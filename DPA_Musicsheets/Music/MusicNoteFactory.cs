@@ -17,7 +17,7 @@ namespace DPA_Musicsheets.Music
 
         public static MusicNote Create(Token token)
         {
-            int i = 5;
+            int i = 3;
             char[] a = token.Value.ToCharArray();
             if (a.Length > 1)
             {
@@ -28,10 +28,7 @@ namespace DPA_Musicsheets.Music
                     j++;
                 }
             }
-            System.Diagnostics.Debug.WriteLine("IK BEN OKTAAF DE BOLLE: " + i);
-            //-1 because this note (the \relative note) doesn't have a length.
             return new MusicNote(-1, i, MusicNoteNote.C);
-
         }
     }
 }
