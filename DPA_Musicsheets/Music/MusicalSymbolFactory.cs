@@ -6,6 +6,7 @@ namespace DPA_Musicsheets.Utility
 {
     public static class MusicalSymbolFactory
     {
+        private static NoteBeamType lastState = NoteBeamType.Single;
         private static readonly Dictionary<MusicNoteNote, string> NoteMap = new Dictionary<MusicNoteNote, string>
         {
             { MusicNoteNote.C, "C" }, { MusicNoteNote.CSharp, "C#" },
@@ -86,36 +87,49 @@ namespace DPA_Musicsheets.Utility
         {
             NoteBeamType t = NoteBeamType.Single;
             if (currentNote.Length < 8) return t;
-            var dir = determineDirection(baseNote, currentNote);
+            var previous = determineDirection(baseNote, previousNote);
+            var current = determineDirection(baseNote, currentNote);
+            var next = determineDirection(baseNote, nextNote);
 
             if (currentNote.Length == nextNote.Length)
             {
                 if (previousNote.Length != currentNote.Length)
                 {
-                    //if (dir != determineDirection(baseNote, previousNote) &&
-                    //    dir == determineDirection(baseNote, nextNote))
-                    //{
-                        Debug.WriteLine("Start");
-                        t = NoteBeamType.Start;
-                    //}
+                    if (current == next)
+                    {
+                        if (lastState == NoteBeamType.Single || lastState == NoteBeamType.End)
+                        {
+                            Debug.WriteLine("Start: "+ lastState);
+                            t = NoteBeamType.Start;
+                            lastState = NoteBeamType.Start;
+                        }
+                    }
                 }
                 else
                 {
-                    Debug.WriteLine("Continue");
-                    t = NoteBeamType.Continue;
+                    if (previous == current && current == next)
+                    {
+                        if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
+                        {
+                            Debug.WriteLine("Continue: " + lastState);
+                            t = NoteBeamType.Continue;
+                            lastState = NoteBeamType.Continue;
+                        }
+                    }    
                 }
             }
 
             if (currentNote.Length == previousNote.Length && currentNote.Length != nextNote.Length)
             {
-                //if (determineDirection(baseNote, previousNote) == determineDirection(baseNote, currentNote) && determineDirection(baseNote, nextNote) == determineDirection(baseNote, currentNote))
-
-                //if (determineDirection(baseNote, previousNote) == dir && 
-                //    dir != determineDirection(baseNote, nextNote))
-                //{
-                    Debug.WriteLine("End");
-                    t = NoteBeamType.End;
-                //}
+                if (previous == current)
+                {
+                    if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
+                    {
+                        Debug.WriteLine("End: " + lastState);
+                        t = NoteBeamType.End;
+                        lastState = NoteBeamType.End;
+                    }
+                }   
             }
 
             return t;

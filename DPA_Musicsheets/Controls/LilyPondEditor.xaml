@@ -8,17 +8,31 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <local:BoolToColorConverter x:Key="converter"/>
+
+        <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
+        <Color x:Key="lightGray" A="255"  R="220" G="220" B="220"/>
+
+        <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
+        <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
+
         <SolidColorBrush x:Key="validBrush" Color="{Binding Valid, Converter={StaticResource converter}}"/>
     </UserControl.Resources>
+
+    <UserControl.Background>
+        <StaticResource ResourceKey="darkGrayBrush"/>
+    </UserControl.Background>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="10"/>
+            <RowDefinition Height="2"/>
         </Grid.RowDefinitions>
 
-        <RichTextBox Grid.Row="0" Margin="8" BorderThickness="0">
-
-        </RichTextBox>
+        <TextBox Grid.Row="0" Background="Transparent" BorderThickness="0" AcceptsTab="True" AcceptsReturn="True">
+            <TextBox.Foreground>
+                <StaticResource ResourceKey="lightGrayBrush"/>
+            </TextBox.Foreground>
+        </TextBox>
 
         <Rectangle Grid.Row="1" Fill="{StaticResource validBrush}"/>
     </Grid>
