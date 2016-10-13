@@ -152,15 +152,20 @@ namespace DPA_Musicsheets.ViewModel
 
                     var baseNote = (parser.Notes.Count > 2 ? parser.Notes[1] : null);
 
+                    //for (int i = 1; i <= 3; i++)
+                    //{
+                    //    MusicalSymbols.Add(MusicalSymbolFactory.test(i));
+                    //}
+
                     int i = 0;
                     foreach (var note in parser.Notes)
                     {
-                        if (i == parser.Notes.Count -1) i = parser.Notes.Count - 2;
+                        if (i == parser.Notes.Count - 1) i = parser.Notes.Count - 2;
 
                         if (!note.IsRelative)
                         {
 
-                            MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note, parser.Notes[i+1], parser.Notes[i - 1]));
+                            MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note, parser.Notes[i + 1], parser.Notes[i - 1]));
                             if (note.HasBarLine)
                             {
                                 MusicalSymbols.Add(new Barline());
