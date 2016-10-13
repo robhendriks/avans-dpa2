@@ -24,6 +24,7 @@
             </ToolBar>
             <ToolBar>
                 <Button Command="{Binding ShowCommand}" Content="Show"/>
+                <Button Command="{Binding DummyCommand}" Content="NOEM EM RON"/>
             </ToolBar>
         </ToolBarTray>
 
@@ -36,7 +37,10 @@
 
             <TextBox Grid.Row="0" AcceptsReturn="True" AcceptsTab="True" Margin="8"/>
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
-            <PSAMWPFControl:IncipitViewerWPF Grid.Row="2" HorizontalAlignment="Stretch"></PSAMWPFControl:IncipitViewerWPF>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
+                <PSAMWPFControl:IncipitViewerWPF x:Name="staff" Symbols="{Binding MusicalSymbols}"></PSAMWPFControl:IncipitViewerWPF>
+            </ScrollViewer>
         </Grid>
 
         <StatusBar Grid.Row="2">

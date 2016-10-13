@@ -2,7 +2,10 @@ using DPA_Musicsheets.Utility;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
+using PSAMControlLibrary;
 using Sanford.Multimedia.Midi;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -53,12 +56,21 @@ namespace DPA_Musicsheets.ViewModel
             }
         }
 
+        private ObservableCollection<MusicalSymbol> _musicalSymbols = new ObservableCollection<MusicalSymbol>();
+
+        public ObservableCollection<MusicalSymbol> MusicalSymbols
+        {
+            get { return _musicalSymbols; }
+            set { _musicalSymbols = value; }
+        }
+
         public bool HasFilename => !string.IsNullOrEmpty(FileName);
 
         public ICommand OpenCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
         public ICommand ShowCommand { get; private set; }
+        public ICommand DummyCommand { get; private set; }
 
         public MainViewModel()
         {
@@ -66,6 +78,7 @@ namespace DPA_Musicsheets.ViewModel
             PlayCommand = new RelayCommand(OnPlayCommand, CanPlay);
             StopCommand = new RelayCommand(OnStopCommand, CanStop);
             ShowCommand = new RelayCommand(OnShowCommand, CanShow);
+            DummyCommand = new RelayCommand(OnDummyCommand);
         }
 
         public bool CanOpen()
@@ -131,8 +144,11 @@ namespace DPA_Musicsheets.ViewModel
         public void OnShowCommand()
         {
             var reader = new MidiReader(FileName);
+        }
 
-
+        public void OnDummyCommand()
+        {
+            MusicalSymbols.Add(new Clef(ClefType.GClef, 2));
         }
     }
 }
