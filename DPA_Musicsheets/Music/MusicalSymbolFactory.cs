@@ -42,7 +42,15 @@ namespace DPA_Musicsheets.Utility
                 NoteStemDirection direction = determineDirection(baseNote, note);
                 NoteBeamType beamType = isPair(previousNote, note, nextNote, baseNote);
                 NoteTieType tieType = hasTie(previousNote, note, nextNote);
-                return new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, tieType, new List<NoteBeamType>() { beamType });
+
+                Note n = new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, tieType, new List<NoteBeamType>() { beamType });
+
+                if (note.HasLengthMultiplier)
+                {
+                    n.NumberOfDots = 1;
+                }
+                
+                return n;
             }
         }
 
