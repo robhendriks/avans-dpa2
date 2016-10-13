@@ -103,7 +103,15 @@ namespace DPA_Musicsheets.LilyPond
                 {
                     case "FUNCTION":
                         parameterName = token.Value;
-                        BeginParameter();
+
+                        if (parameterName == "\\repeat" || parameterName == "\\alternative")
+                        {
+                            SkipUntilCurlyBrace();
+                        }
+                        else
+                        {
+                            BeginParameter();
+                        }
                         break;
                     case "NOTE":
                         AddMusicNote(token.Value);
@@ -111,9 +119,26 @@ namespace DPA_Musicsheets.LilyPond
                     case "PIPE":
                         //AddBarLine();
                         break;
+                    case "CURLY_OPEN":
+                        SkipUntilCurlyBrace();
+                        break;
                 }
             }
             tokenIndex--;
+        }
+
+        private void SkipUntilCurlyBrace()
+        {
+            Token token;
+            while ((token = Next()) != null)
+            {
+                if (token.Type == "CURLY_CLOSE")
+                {
+                    tokenIndex--;
+                    break;
+                }
+                tokenIndex++;
+            }
         }
 
         private void AddMusicNote(string note)
@@ -147,7 +172,10 @@ namespace DPA_Musicsheets.LilyPond
 
             //TODO: Check for double keys. (multiple time commands?)
 
-            Parameters.Add(key, value);
+            if (!Parameters.ContainsKey(key))
+            {
+                Parameters.Add(key, value);
+            }
         }
 
         private void EndFunction()
