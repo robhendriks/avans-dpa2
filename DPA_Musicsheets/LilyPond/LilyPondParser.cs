@@ -151,6 +151,8 @@ namespace DPA_Musicsheets.LilyPond
 
         private void AddMusicNote(string str)
         {
+
+            
             //TODO: Check which note & octave the current note is based on previous Note.
 
             Regex regex = new Regex("([a-z])(is|es)?('|,)?([0-9]+)", RegexOptions.IgnoreCase);
@@ -168,6 +170,11 @@ namespace DPA_Musicsheets.LilyPond
 
                 var octave = LilyPondHelper.Octave(noteNote, octaveModifier, previousNote);
                 var nextNote = new MusicNote(noteLength, octave, noteNote);
+
+                if (str.Contains("."))
+                {
+                    nextNote.HasLengthMultiplier = true;
+                }
 
                 Notes.Add(nextNote);
 
