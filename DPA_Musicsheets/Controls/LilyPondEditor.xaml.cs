@@ -17,8 +17,8 @@ namespace DPA_Musicsheets.Controls
 {
     public partial class LilyPondEditor : UserControl
     {
-        public static bool ValidProperty
-            = DependencyProperty.Register("Valid", typeof(bool), typeof(LilyPondEditor);
+       // public static bool ValidProperty
+       //     = DependencyProperty.Register("Valid", typeof(bool), typeof(LilyPondEditor);
 
         //public bool Valid
         //{

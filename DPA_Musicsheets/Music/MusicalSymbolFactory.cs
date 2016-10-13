@@ -29,6 +29,7 @@ namespace DPA_Musicsheets.Utility
             { 1, MusicalSymbolDuration.Whole }
         };
 
+
         public static MusicalSymbol Create(MusicNote baseNote, MusicNote note, MusicNote nextNote, MusicNote previousNote)
         {
             if (note.Note == MusicNoteNote.Rest)
@@ -38,7 +39,7 @@ namespace DPA_Musicsheets.Utility
             else
             {
                 NoteStemDirection direction = NoteStemDirection.Up;
-                NoteTieType tieType = isPair(previousNote, note, nextNote);
+                NoteBeamType beamType = isPair(previousNote, note, nextNote);
                 if (baseNote != null)
                 {
                     int baseOctave = baseNote.Octave;
@@ -48,31 +49,33 @@ namespace DPA_Musicsheets.Utility
                     }
                 }
 
-                return new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, tieType, new List<NoteBeamType>() { NoteBeamType.Single });
+                return new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, NoteTieType.Start, new List<NoteBeamType>() { beamType });
             }
         }
 
-        public static NoteTieType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote)
+        public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote)
         {
-            NoteTieType t = NoteTieType.None;
-            if (currentNote.Octave == 8 && nextNote.Octave == 8)
+            NoteBeamType t = NoteBeamType.Single;
+            if (currentNote.Length < 8) return t;
+
+            if (currentNote.Length == nextNote.Length)
             {
-                if (previousNote.Octave == 8)
+                if (previousNote.Length == currentNote.Length)
                 {
-                    t = NoteTieType.StopAndStartAnother;
+                    t = NoteBeamType.Continue;
                 }
                 else
                 {
-                    t = NoteTieType.Start;
+                    t = NoteBeamType.Start;
                 }
             }
 
-            if (currentNote.Octave == 8 && previousNote.Octave == 8 && nextNote.Octave != 8)
+            if (currentNote.Length ==  previousNote.Length && currentNote.Length != nextNote.Length)
             {
-                t = NoteTieType.Stop;
+                t = NoteBeamType.End;
             }
 
-                return t;
+            return t;
         }
 
         public static string GetNote(MusicNoteNote note)
