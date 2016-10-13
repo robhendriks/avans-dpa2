@@ -52,7 +52,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PSAMControlLibrary">
-      <HintPath>..\packages\PSAMControlLibrary.dll</HintPath>
+      <HintPath>..\lib\PSAMControlLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Sanford.Multimedia.Midi, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Sanford.Multimedia.Midi.6.1.2\lib\net20\Sanford.Multimedia.Midi.dll</HintPath>

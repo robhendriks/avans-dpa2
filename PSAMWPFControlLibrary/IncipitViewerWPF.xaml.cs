@@ -79,7 +79,7 @@ namespace PSAMWPFControlLibrary
 
         public static readonly DependencyProperty SymbolsProperty =
             DependencyProperty.Register("Symbols", typeof(IEnumerable<MusicalSymbol>), typeof(IncipitViewerWPF),
-                new PropertyMetadata(new PropertyChangedCallback(OnSymbolsPropertyChanged)));
+                new PropertyMetadata(new List<MusicalSymbol>(), new PropertyChangedCallback(OnSymbolsPropertyChanged)));
 
         private static void OnSymbolsPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
@@ -96,9 +96,9 @@ namespace PSAMWPFControlLibrary
             set { SetValue(SymbolsProperty, value); }
         }
 
-        public IEnumerable<MusicalSymbol> incipit
+        public List<MusicalSymbol> incipit
         {
-            get { return Symbols; }
+            get { return Symbols.ToList(); }
         }
 
         private void OnSymbolsPropertyChanged(IEnumerable<MusicalSymbol> oldValue, IEnumerable<MusicalSymbol> newValue)
