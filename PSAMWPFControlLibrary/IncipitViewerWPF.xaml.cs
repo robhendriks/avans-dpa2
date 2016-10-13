@@ -63,6 +63,10 @@ namespace PSAMWPFControlLibrary
     /// </summary>
     public partial class IncipitViewerWPF : UserControl, IIncipitViewer
     {
+        private static readonly SolidColorBrush kw1 = (SolidColorBrush)new BrushConverter().ConvertFrom("#59ABE3");
+        private static readonly SolidColorBrush kw2 = (SolidColorBrush)new BrushConverter().ConvertFrom("#81CFE0");
+        private static readonly SolidColorBrush kw3 = (SolidColorBrush)new BrushConverter().ConvertFrom("#446CB3");
+
         #region Private fields
 
         private XmlDocument xmlIncipit = new XmlDocument();
@@ -664,9 +668,12 @@ namespace PSAMWPFControlLibrary
         {
             base.OnRender(drawingContext);
 
-            Pen pen = new Pen(Brushes.Black, 1.0f);
-            Pen beamPen = new Pen(Brushes.Black, 2.0f);
-            Brush textBrush = new SolidColorBrush(Colors.Black);
+            var scb = (SolidColorBrush)GetValue(ForegroundProperty);
+            var col = scb.Color;
+
+            Pen pen = new Pen(scb, 1.0f);
+            Pen beamPen = new Pen(scb, 2.0f);
+            Pen linePen = new Pen(new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66)), 1.0f);
 
             float currentClefPositionY = 0;
             Clef currentClef = new Clef(ClefType.CClef, 2);
@@ -709,7 +716,7 @@ namespace PSAMWPFControlLibrary
 
             for (int i = 0; i < 5; i++)
             {
-                drawingContext.DrawLine(pen, startPoint, endPoint);
+                drawingContext.DrawLine(linePen, startPoint, endPoint);
                 lines[i] = paddingTop + i * lineSpacing;
                 startPoint.Y += lineSpacing;
                 endPoint.Y += lineSpacing;
@@ -726,7 +733,7 @@ namespace PSAMWPFControlLibrary
                         currentClefPositionY = lines[4] - 24.4f - (((Clef)symbol).Line - 1) * lineSpacing;
                         currentClef = (Clef)symbol;
                         drawingContext.DrawText(new FormattedText(symbol.MusicalCharacter, Thread.CurrentThread.CurrentUICulture,
-                            FlowDirection.LeftToRight, TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(
+                            FlowDirection.LeftToRight, TypeFaces.MusicFont, 27.5f, kw3), new Point(
                                 currentXPosition + 3.5f, currentClefPositionY));
                         currentXPosition += 20;
                         break;
@@ -744,7 +751,7 @@ namespace PSAMWPFControlLibrary
                         currentClefPositionY = lines[4] - 24.4f - (((Clef)symbol).Line - 1) * lineSpacing;
                         currentClef = (Clef)symbol;
                         drawingContext.DrawText(new FormattedText(symbol.MusicalCharacter, Thread.CurrentThread.CurrentUICulture,
-                            FlowDirection.LeftToRight, TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(
+                            FlowDirection.LeftToRight, TypeFaces.MusicFont, 27.5f, scb), new Point(
                                 currentXPosition + 3.5f, currentClefPositionY));
                         currentXPosition += 20;
                     }
@@ -781,7 +788,7 @@ namespace PSAMWPFControlLibrary
                         {
                             drawingContext.DrawText(new FormattedText(symbol.MusicalCharacter,
                                 Thread.CurrentThread.CurrentUICulture, FlowDirection.LeftToRight,
-                                TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(currentXPosition + 3.5f, flatOrSharpPositionY));
+                                TypeFaces.MusicFont, 27.5f, scb), new Point(currentXPosition + 3.5f, flatOrSharpPositionY));
                             if (jumpFourth) flatOrSharpPositionY += 3 * 3 * jumpDirection;
                             else flatOrSharpPositionY += 3 * 4 * jumpDirection;
                             jumpFourth = !jumpFourth;
@@ -797,20 +804,20 @@ namespace PSAMWPFControlLibrary
                         if (((TimeSignature)symbol).SignatureType == TimeSignatureType.Common)
                             drawingContext.DrawText(new FormattedText(MusicalCharacters.CommonTime,
                                 Thread.CurrentThread.CurrentUICulture, FlowDirection.LeftToRight,
-                                TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(currentXPosition + 3.5f, timeSignaturePositionY));
+                                TypeFaces.MusicFont, 27.5f, kw1), new Point(currentXPosition + 3.5f, timeSignaturePositionY));
                         else if (((TimeSignature)symbol).SignatureType == TimeSignatureType.Cut)
                             drawingContext.DrawText(new FormattedText(MusicalCharacters.CutTime,
                                 Thread.CurrentThread.CurrentUICulture, FlowDirection.LeftToRight,
-                                TypeFaces.MusicFont, 27.5f, Brushes.Black), new Point(currentXPosition + 3.5f, timeSignaturePositionY));
+                                TypeFaces.MusicFont, 27.5f, kw2), new Point(currentXPosition + 3.5f, timeSignaturePositionY));
 
                         else
                         {
                             drawingContext.DrawText(new FormattedText(Convert.ToString(((TimeSignature)symbol).NumberOfBeats),
                                 Thread.CurrentThread.CurrentUICulture, FlowDirection.LeftToRight,
-                                TypeFaces.TimeSignatureFont, 14.5, Brushes.Black), new Point(currentXPosition, timeSignaturePositionY + 9));
+                                TypeFaces.TimeSignatureFont, 14.5, kw1), new Point(currentXPosition, timeSignaturePositionY + 9));
                             drawingContext.DrawText(new FormattedText(Convert.ToString(((TimeSignature)symbol).TypeOfBeats),
                                 Thread.CurrentThread.CurrentUICulture, FlowDirection.LeftToRight,
-                                TypeFaces.TimeSignatureFont, 14.5, Brushes.Black), new Point(currentXPosition, timeSignaturePositionY + 21));
+                                TypeFaces.TimeSignatureFont, 14.5, kw2), new Point(currentXPosition, timeSignaturePositionY + 21));
                         }
                         currentXPosition += 20;
                     }
@@ -826,7 +833,7 @@ namespace PSAMWPFControlLibrary
                             dirPositionY = 0;
                         else if (dir.Placement == DirectionPlacementType.Below)
                             dirPositionY = 50;
-                        DrawString(drawingContext, dir.Text, TypeFaces.DirectionFont, textBrush, currentXPosition, dirPositionY, 11);
+                        DrawString(drawingContext, dir.Text, TypeFaces.DirectionFont, scb, currentXPosition, dirPositionY, 11);
 
                     }
                     else if (symbol.Type == MusicalSymbolType.Note)
@@ -868,9 +875,9 @@ namespace PSAMWPFControlLibrary
 
                         //Draw a note / Rysuj nutę:
                         if (!note.IsGraceNote)
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, Brushes.Black, currentXPosition + 3.5f, notePositionY, 27.0f);
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, scb, currentXPosition + 3.5f, notePositionY, 27.0f);
                         else
-                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, textBrush, currentXPosition + 5.5f,
+                            DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.GraceNoteFont, scb, currentXPosition + 5.5f,
                                 notePositionY + 2, 24.5f);
                         lastXPosition = currentXPosition;
                         note.Location = new System.Drawing.PointF(currentXPosition, notePositionY);
@@ -997,7 +1004,7 @@ namespace PSAMWPFControlLibrary
                                     if (((Note)symbol).StemDirection == NoteStemDirection.Up) tmpMod = 12;
                                     else tmpMod = 28;
                                     DrawString(drawingContext, Convert.ToString(numberOfNotesUnderTuplet), TypeFaces.LyricFont,
-                                        textBrush,
+                                        scb,
                                         previousStemPositionsX[beamLoop] + (currentStemPositionX - previousStemPositionsX[beamLoop]) / 2 - 1,
                                             previousStemEndPositionsY[beamLoop] - (currentStemEndPositionY - previousStemEndPositionsY[beamLoop]) / 2 + tmpMod, 14);
                                     alreadyPaintedNumberOfNotesInTuplet = true;
@@ -1009,12 +1016,12 @@ namespace PSAMWPFControlLibrary
                                 float xPos = currentStemPositionX - 4;
                                 if (((Note)symbol).StemDirection == NoteStemDirection.Down)
                                 {
-                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacterRev, TypeFaces.MusicFont, textBrush,
+                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacterRev, TypeFaces.MusicFont, scb,
                                         xPos + 3.5f, currentStemEndPositionY + 7, 27.5f);
                                 }
                                 else
                                 {
-                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacter, TypeFaces.MusicFont, textBrush,
+                                    DrawString(drawingContext, ((Note)symbol).NoteFlagCharacter, TypeFaces.MusicFont, scb,
                                         xPos + 3.5f, currentStemEndPositionY - 1, 27.5f);
                                 }
                             }
@@ -1145,7 +1152,7 @@ namespace PSAMWPFControlLibrary
                             if ((((Note)symbol).Lyrics[j] == LyricsType.Begin) ||
                                 (((Note)symbol).Lyrics[j] == LyricsType.Middle))
                                 sBuilder.Append("-");
-                            DrawString(drawingContext, sBuilder.ToString(), TypeFaces.LyricFont, textBrush, currentXPosition, textPositionY, 11);
+                            DrawString(drawingContext, sBuilder.ToString(), TypeFaces.LyricFont, scb, currentXPosition, textPositionY, 11);
                             textPositionY += 12;
                         }
 
@@ -1159,9 +1166,9 @@ namespace PSAMWPFControlLibrary
                                 articulationPosition = notePositionY + 10;
 
                             if (((Note)symbol).Articulation == ArticulationType.Staccato)
-                                DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, textBrush, currentXPosition + 6, articulationPosition, 26.5f);
+                                DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, scb, currentXPosition + 6, articulationPosition, 26.5f);
                             else if (((Note)symbol).Articulation == ArticulationType.Accent)
-                                DrawString(drawingContext, ">", TypeFaces.MiscArticulationFont, textBrush, currentXPosition + 6, articulationPosition + 16, 14);
+                                DrawString(drawingContext, ">", TypeFaces.MiscArticulationFont, scb, currentXPosition + 6, articulationPosition + 16, 14);
 
                         }
 
@@ -1181,7 +1188,7 @@ namespace PSAMWPFControlLibrary
                             {
                                 trillPos = notePositionY + 10;
                             }
-                            DrawString(drawingContext, "tr", TypeFaces.TrillFont, textBrush, currentXPosition + 6, trillPos, 14);
+                            DrawString(drawingContext, "tr", TypeFaces.TrillFont, scb, currentXPosition + 6, trillPos, 14);
                         }
 
                         //Draw tremolos / Rysuj tremola:
@@ -1229,7 +1236,7 @@ namespace PSAMWPFControlLibrary
                             pathGeom.Figures.Add(pf);
                             drawingContext.DrawGeometry(null, beamPen, pathGeom);
 
-                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, textBrush, currentXPosition + 10, ferPos, 27);
+                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, scb, currentXPosition + 10, ferPos, 27);
 
                         }
 
@@ -1243,12 +1250,12 @@ namespace PSAMWPFControlLibrary
                                 9 * numberOfDoubleAccidentals;
                             for (int i = 0; i < numberOfSingleAccidentals; i++)
                             {
-                                DrawString(drawingContext, MusicalCharacters.Sharp, TypeFaces.MusicFont, textBrush, accPlacement, notePositionY, 26.5f);
+                                DrawString(drawingContext, MusicalCharacters.Sharp, TypeFaces.MusicFont, scb, accPlacement, notePositionY, 26.5f);
                                 accPlacement += 9;
                             }
                             for (int i = 0; i < numberOfDoubleAccidentals; i++)
                             {
-                                DrawString(drawingContext, MusicalCharacters.DoubleSharp, TypeFaces.MusicFont, textBrush, accPlacement, notePositionY, 26.5f);
+                                DrawString(drawingContext, MusicalCharacters.DoubleSharp, TypeFaces.MusicFont, scb, accPlacement, notePositionY, 26.5f);
                                 accPlacement += 9;
                             }
                         }
@@ -1261,25 +1268,25 @@ namespace PSAMWPFControlLibrary
                                 9 * numberOfDoubleAccidentals;
                             for (int i = 0; i < numberOfSingleAccidentals; i++)
                             {
-                                DrawString(drawingContext, MusicalCharacters.Flat, TypeFaces.MusicFont, textBrush, accPlacement, notePositionY, 26.5f);
+                                DrawString(drawingContext, MusicalCharacters.Flat, TypeFaces.MusicFont, scb, accPlacement, notePositionY, 26.5f);
                                 accPlacement += 9;
                             }
                             for (int i = 0; i < numberOfDoubleAccidentals; i++)
                             {
-                                DrawString(drawingContext, MusicalCharacters.DoubleFlat, TypeFaces.MusicFont, textBrush, accPlacement, notePositionY, 26.5f);
+                                DrawString(drawingContext, MusicalCharacters.DoubleFlat, TypeFaces.MusicFont, scb, accPlacement, notePositionY, 26.5f);
                                 accPlacement += 9;
                             }
                         }
                         if (((Note)symbol).HasNatural == true)
                         {
-                            DrawString(drawingContext, MusicalCharacters.Natural, TypeFaces.MusicFont, textBrush, currentXPosition - 9, notePositionY, 26.5f);
+                            DrawString(drawingContext, MusicalCharacters.Natural, TypeFaces.MusicFont, scb, currentXPosition - 9, notePositionY, 26.5f);
                         }
 
                         //Draw dots / Rysuj kropki:
                         if (((Note)symbol).NumberOfDots > 0) currentXPosition += 16;
                         for (int i = 0; i < ((Note)symbol).NumberOfDots; i++)
                         {
-                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, textBrush, currentXPosition, notePositionY, 26.5f);
+                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, scb, currentXPosition, notePositionY, 26.5f);
                             currentXPosition += 6;
                         }
 
@@ -1318,21 +1325,21 @@ namespace PSAMWPFControlLibrary
 
                         float restPositionY = (lines[0] - 9);
 
-                        DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, textBrush, currentXPosition, restPositionY, 26.5f);
+                        DrawString(drawingContext, symbol.MusicalCharacter, TypeFaces.MusicFont, scb, currentXPosition, restPositionY, 26.5f);
                         lastXPosition = currentXPosition;
 
                         //Draw number of measures for multimeasure rests / Rysuj ilość taktów dla pauz wielotaktowych:
                         if (((Rest)symbol).MultiMeasure > 1)
                         {
                             DrawString(drawingContext, Convert.ToString(((Rest)symbol).MultiMeasure),
-                                TypeFaces.LyricFontBold, textBrush, currentXPosition + 6, restPositionY, 0.8f);
+                                TypeFaces.LyricFontBold, scb, currentXPosition + 6, restPositionY, 0.8f);
                         }
 
                         //Draw dots / Rysuj kropki:
                         if (((Rest)symbol).NumberOfDots > 0) currentXPosition += 16;
                         for (int i = 0; i < ((Rest)symbol).NumberOfDots; i++)
                         {
-                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, textBrush, currentXPosition, restPositionY, 26.5f);
+                            DrawString(drawingContext, MusicalCharacters.Dot, TypeFaces.MusicFont, scb, currentXPosition, restPositionY, 26.5f);
                             currentXPosition += 6;
                         }
 
@@ -1354,7 +1361,7 @@ namespace PSAMWPFControlLibrary
                         if (barline.RepeatSign == RepeatSignType.None)
                         {
                             currentXPosition += 16;
-                            drawingContext.DrawLine(pen, new Point(currentXPosition, lines[4]), new Point(currentXPosition, lines[0]));
+                            drawingContext.DrawLine(linePen, new Point(currentXPosition, lines[4]), new Point(currentXPosition, lines[0]));
                             currentXPosition += 6;
                         }
                         else if (barline.RepeatSign == RepeatSignType.Forward)
@@ -1371,14 +1378,14 @@ namespace PSAMWPFControlLibrary
                                 }
                             }
                             currentXPosition += 2;
-                            DrawString(drawingContext, MusicalCharacters.RepeatForward, TypeFaces.StaffFont, textBrush, currentXPosition,
+                            DrawString(drawingContext, MusicalCharacters.RepeatForward, TypeFaces.StaffFont, scb, currentXPosition,
                                 lines[0] - 15.5f, 1.9f);
                             currentXPosition += 20;
                         }
                         else if (barline.RepeatSign == RepeatSignType.Backward)
                         {
                             currentXPosition -= 2;
-                            DrawString(drawingContext, MusicalCharacters.RepeatBackward, TypeFaces.StaffFont, textBrush, currentXPosition,
+                            DrawString(drawingContext, MusicalCharacters.RepeatBackward, TypeFaces.StaffFont, scb, currentXPosition,
                                 lines[0] - 15.5f, 1.9f);
                             currentXPosition += 6;
                         }

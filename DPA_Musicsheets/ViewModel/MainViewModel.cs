@@ -69,14 +69,12 @@ namespace DPA_Musicsheets.ViewModel
         public ICommand OpenCommand { get; private set; }
         public ICommand PlayCommand { get; private set; }
         public ICommand StopCommand { get; private set; }
-        public ICommand ShowCommand { get; private set; }
 
         public MainViewModel()
         {
             OpenCommand = new RelayCommand(OnOpenCommand, CanOpen);
             PlayCommand = new RelayCommand(OnPlayCommand, CanPlay);
             StopCommand = new RelayCommand(OnStopCommand, CanStop);
-            ShowCommand = new RelayCommand(OnShowCommand, CanShow);
         }
 
         public bool CanOpen()
@@ -113,72 +111,87 @@ namespace DPA_Musicsheets.ViewModel
 
                 if (IsLily)
                 {
-                    var reader = new StreamReader(FileName);
-                    var lexer = new LilyPond.LilyPondLexer(reader);
-                    var parser = new LilyPond.LilyPondParser(lexer);
-
-                    foreach (var pair in parser.Parameters)
+                    try
                     {
-                        Debug.WriteLine(pair);
-
-                        switch (pair.Key)
-                        {
-                            case "clef":
-                                if (pair.Value == "treble")
-                                {
-                                    MusicalSymbols.Add(new Clef(ClefType.GClef, 2));
-                                }
-                                else if (pair.Value == "bass")
-                                {
-                                    MusicalSymbols.Add(new Clef(ClefType.FClef, 2));
-                                }
-                                else
-                                {
-                                    MusicalSymbols.Add(new Clef(ClefType.CClef, 2));
-                                }
-                                break;
-                            case "time":
-                                var parts = pair.Value.Split('/');
-
-                                uint beats = uint.Parse(parts[0]);
-                                uint beatType = uint.Parse(parts[1]);
-
-                                MusicalSymbols.Add(new PSAMControlLibrary.TimeSignature(TimeSignatureType.Numbers, beats, beatType));
-                                break;
-                            case "tempo":
-                                break;
-                        }
+                        OpenLilyPond();
                     }
-
-                    var baseNote = (parser.Notes.Count > 2 ? parser.Notes[1] : null);
-
-                    //for (int i = 1; i <= 3; i++)
-                    //{
-                    //    MusicalSymbols.Add(MusicalSymbolFactory.test(i));
-                    //}
-
-                    int i = 0;
-                    foreach (var note in parser.Notes)
+                    catch(LilyPond.LilyPondException e)
                     {
-                        if (i == parser.Notes.Count - 1) i = parser.Notes.Count - 2;
-
-                        if (!note.IsRelative)
-                        {
-
-                            MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note, parser.Notes[i + 1], parser.Notes[i - 1]));
-                            if (note.HasBarLine)
-                            {
-                                MusicalSymbols.Add(new Barline());
-                            }
-                        }
-
-                        i++;
+                        MessageBox.Show(e.Message);
                     }
                 }
                 else
                 {
-                    ShowCommand.Execute(null);
+                    OpenMidi();
                 }
+            }
+        }
+
+        private void OpenMidi()
+        {
+        }
+
+        private void OpenLilyPond()
+        {
+            var reader = new StreamReader(FileName);
+            var lexer = new LilyPond.LilyPondLexer(reader);
+            var parser = new LilyPond.LilyPondParser(lexer);
+
+            foreach (var pair in parser.Parameters)
+            {
+                Debug.WriteLine(pair);
+
+                switch (pair.Key)
+                {
+                    case "clef":
+                        if (pair.Value == "treble")
+                        {
+                            MusicalSymbols.Add(new Clef(ClefType.GClef, 2));
+                        }
+                        else if (pair.Value == "bass")
+                        {
+                            MusicalSymbols.Add(new Clef(ClefType.FClef, 2));
+                        }
+                        else
+                        {
+                            MusicalSymbols.Add(new Clef(ClefType.CClef, 2));
+                        }
+                        break;
+                    case "time":
+                        var parts = pair.Value.Split('/');
+
+                        uint beats = uint.Parse(parts[0]);
+                        uint beatType = uint.Parse(parts[1]);
+
+                        MusicalSymbols.Add(new PSAMControlLibrary.TimeSignature(TimeSignatureType.Numbers, beats, beatType));
+                        break;
+                    case "tempo":
+                        break;
+                }
+            }
+
+            var baseNote = (parser.Notes.Count > 2 ? parser.Notes[1] : null);
+            GenerateNotes(parser.Notes, baseNote);
+        }
+
+        private void GenerateNotes(List<MusicNote> notes, MusicNote baseNote = null)
+        {
+            int i = 0;
+            foreach (var note in notes)
+            {
+                if (i == notes.Count - 1) i = notes.Count - 2;
+
+                if (!note.IsRelative)
+                {
+
+                    MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note, notes[i + 1], notes[i - 1]));
+                    if (note.HasBarLine)
+                    {
+                        MusicalSymbols.Add(new Barline());
+                    }
+                }
+
+                i++;
             }
         }
 
@@ -192,10 +205,6 @@ namespace DPA_Musicsheets.ViewModel
         {
             Playing = false;
             player.Stop();
-        }
-
-        public void OnShowCommand()
-        {
         }
     }
 }

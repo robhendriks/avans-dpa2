@@ -8,7 +8,20 @@
         xmlns:c="clr-namespace:DPA_Musicsheets.Controls"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
+        <Color x:Key="lightGray" A="255"  R="220" G="220" B="220"/>
+
+        <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
+        <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
+    </Window.Resources>
+
     <Grid>
+        <Grid.Background>
+            <StaticResource ResourceKey="darkGrayBrush"/>
+        </Grid.Background>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -22,10 +35,6 @@
             <ToolBar>
                 <Button Command="{Binding PlayCommand}" Content="Play"/>
                 <Button Command="{Binding StopCommand}" Content="Stop"/>
-            </ToolBar>
-            <ToolBar>
-                <Button Command="{Binding ShowCommand}" Content="Show"/>
-                <Button Command="{Binding DummyCommand}" Content="NOEM EM RON"/>
             </ToolBar>
         </ToolBarTray>
 
@@ -41,7 +50,11 @@
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
-                <PSAMWPFControl:IncipitViewerWPF x:Name="staff" Symbols="{Binding MusicalSymbols}"></PSAMWPFControl:IncipitViewerWPF>
+                <PSAMWPFControl:IncipitViewerWPF x:Name="staff" Symbols="{Binding MusicalSymbols}">
+                    <PSAMWPFControl:IncipitViewerWPF.Foreground>
+                        <StaticResource ResourceKey="lightGrayBrush"/>
+                    </PSAMWPFControl:IncipitViewerWPF.Foreground>
+                </PSAMWPFControl:IncipitViewerWPF>
             </ScrollViewer>
         </Grid>
 
