@@ -2,6 +2,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:DPA_Musicsheets.ViewModel" />
+
+            <BitmapImage x:Key="nootNoot" UriSource="Images/nootNoot.jpg"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

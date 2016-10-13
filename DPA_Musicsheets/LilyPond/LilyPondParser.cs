@@ -113,9 +113,13 @@ namespace DPA_Musicsheets.LilyPond
                         {
                             SkipUntilCurlyBrace();
                         }
-                        else
+                        else if (parameterName == "\\time" || parameterName == "\\clef" || parameterName == "\\tempo")
                         {
                             BeginParameter();
+                        }
+                        else
+                        {
+                            throw new LilyPondException($"Unexpected parameter {parameterName}");
                         }
                         break;
                     case "NOTE":
@@ -142,7 +146,7 @@ namespace DPA_Musicsheets.LilyPond
             {
                 if (token.Type == "CURLY_CLOSE")
                 {
-                    tokenIndex--;
+                    //tokenIndex--;
                     break;
                 }
                 tokenIndex++;
@@ -152,7 +156,7 @@ namespace DPA_Musicsheets.LilyPond
         private void AddMusicNote(string str)
         {
 
-            
+
             //TODO: Check which note & octave the current note is based on previous Note.
 
             Regex regex = new Regex("([a-z])(is|es)?('|,)?([0-9]+)", RegexOptions.IgnoreCase);

@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Microsoft.Win32;
 using PSAMControlLibrary;
 using Sanford.Multimedia.Midi;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -39,7 +40,6 @@ namespace DPA_Musicsheets.ViewModel
             {
                 _lilyPond = value;
                 RaisePropertyChanged(() => LilyPond);
-                CommandManager.InvalidateRequerySuggested();
             }
         }
 
@@ -69,6 +69,18 @@ namespace DPA_Musicsheets.ViewModel
             }
         }
 
+        private string _lilyPondError = string.Empty;
+
+        public string LilyPondError
+        {
+            get { return _lilyPondError; }
+            private set
+            {
+                _lilyPondError = value;
+                RaisePropertyChanged(() => LilyPondError);
+            }
+        }
+
         private ObservableCollection<MusicalSymbol> _musicalSymbols = new ObservableCollection<MusicalSymbol>();
 
         public ObservableCollection<MusicalSymbol> MusicalSymbols
@@ -80,34 +92,22 @@ namespace DPA_Musicsheets.ViewModel
         public bool HasFilename => !string.IsNullOrEmpty(FileName);
 
         public ICommand OpenCommand { get; private set; }
-        public ICommand PlayCommand { get; private set; }
-        public ICommand StopCommand { get; private set; }
+        public ICommand TestCommand { get; private set; }
 
         public MainViewModel()
         {
-            OpenCommand = new RelayCommand(OnOpenCommand, CanOpen);
-            PlayCommand = new RelayCommand(OnPlayCommand, CanPlay);
-            StopCommand = new RelayCommand(OnStopCommand, CanStop);
+            OpenCommand = new RelayCommand(OnOpenCommand);
+            TestCommand = new RelayCommand(OnTestCommand, CanTest);
         }
 
-        public bool CanOpen()
+        public bool CanTest()
         {
-            return !Playing;
+            return !string.IsNullOrEmpty(FileName) && IsLily;
         }
 
-        public bool CanPlay()
+        public void OnTestCommand()
         {
-            return HasFilename && !Playing;
-        }
-
-        public bool CanStop()
-        {
-            return Playing;
-        }
-
-        public bool CanShow()
-        {
-            return HasFilename;
+            ValidateLilyPond();
         }
 
         public void OnOpenCommand()
@@ -124,14 +124,7 @@ namespace DPA_Musicsheets.ViewModel
 
                 if (IsLily)
                 {
-                    try
-                    {
-                        OpenLilyPond();
-                    }
-                    catch(LilyPond.LilyPondException e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
+                    OpenLilyPond();
                 }
                 else
                 {
@@ -151,16 +144,45 @@ namespace DPA_Musicsheets.ViewModel
             GenerateNotes(reader.Notes, null);
         }
 
-        private async void OpenLilyPond()
+        private void OpenLilyPond()
         {
             var reader = new StreamReader(FileName);
+
+            try
+            {
+                MusicalSymbols.Clear();
+                ParseLilyPond(reader);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        private void ValidateLilyPond()
+        {
+            LilyPondError = "";
+            var reader = new StringReader(LilyPond);
+
+            try
+            {
+                MusicalSymbols.Clear();
+                ParseLilyPond(reader);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.StackTrace);
+                LilyPondError = e.Message;
+            }
+        }
+
+        private void ParseLilyPond(TextReader reader)
+        {
             var lexer = new LilyPond.LilyPondLexer(reader);
             var parser = new LilyPond.LilyPondParser(lexer);
 
             foreach (var pair in parser.Parameters)
             {
-                Debug.WriteLine(pair);
-
                 switch (pair.Key)
                 {
                     case "clef":
@@ -217,18 +239,6 @@ namespace DPA_Musicsheets.ViewModel
 
                 i++;
             }
-        }
-
-        public void OnPlayCommand()
-        {
-            Playing = true;
-            player.Play(FileName);
-        }
-
-        public void OnStopCommand()
-        {
-            Playing = false;
-            player.Stop();
         }
     }
 }

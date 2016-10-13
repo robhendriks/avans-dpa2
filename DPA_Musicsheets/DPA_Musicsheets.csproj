@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\StringToBoolConverter.cs" />
     <Compile Include="Controls\BoolToColorConverter.cs" />
     <Compile Include="Controls\LilyPondEditor.xaml.cs">
       <DependentUpon>LilyPondEditor.xaml</DependentUpon>
@@ -162,6 +163,9 @@
       <Project>{24e32e85-6a86-4146-b877-30b422958874}</Project>
       <Name>PSAMWPFControlLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\nootNoot.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -42,7 +42,7 @@ namespace DPA_Musicsheets.Controls
 
         public void InvalidateLilyPond()
         {
-            Debug.WriteLine("I AM HAS ALL YOUR L I L Y P O N D S");
+            //Debug.WriteLine("I AM HAS ALL YOUR L I L Y P O N D S");
         }
     }
 }

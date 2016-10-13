@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:DPA_Musicsheets"
         xmlns:c="clr-namespace:DPA_Musicsheets.Controls"
         mc:Ignorable="d"
-        Title="LilyStront" Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
+        Icon="{StaticResource nootNoot}"
+        Title="Noot Studio 2 Pro Edition (TRIAL EXPIRING IN 30 DAYS)" Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <Window.Resources>
         <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
@@ -15,6 +16,8 @@
 
         <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
         <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
+
+        <c:StringToBoolConverter x:Key="datass"/>
     </Window.Resources>
 
     <Grid>
@@ -33,19 +36,18 @@
                 <Button Command="{Binding OpenCommand}" Content="Open"/>
             </ToolBar>
             <ToolBar>
-                <Button Command="{Binding PlayCommand}" Content="Play"/>
-                <Button Command="{Binding StopCommand}" Content="Stop"/>
+                <Button Command="{Binding TestCommand}" Content="Test"/>
             </ToolBar>
         </ToolBarTray>
 
-        <Grid Grid.Row="1" Grid.RowSpan="2">
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="3"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <c:LilyPondEditor Grid.Row="0" LilyPond="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></c:LilyPondEditor>
+            <c:LilyPondEditor Grid.Row="0" Valid="{Binding LilyPondError, Converter={StaticResource datass}}" LilyPond="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></c:LilyPondEditor>
 
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 
@@ -61,6 +63,9 @@
         <StatusBar Grid.Row="2">
             <StatusBarItem>
                 <TextBlock Text="{Binding FileName, Mode=OneWay}" />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

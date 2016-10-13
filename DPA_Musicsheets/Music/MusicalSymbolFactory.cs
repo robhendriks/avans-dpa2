@@ -71,6 +71,10 @@ namespace DPA_Musicsheets.Utility
         private static NoteTieType hasTie(MusicNote previousNote, MusicNote note, MusicNote nextNote)
         {
             NoteTieType tieType = NoteTieType.None;
+            if (previousNote == null || nextNote == null)
+            {
+                return tieType;
+            }
 
             if (note.HasTie && !previousNote.HasTie)
             {
@@ -107,7 +111,7 @@ namespace DPA_Musicsheets.Utility
                     {
                         if (lastState == NoteBeamType.Single || lastState == NoteBeamType.End)
                         {
-                            Debug.WriteLine("Start: " + lastState);
+                            //Debug.WriteLine("Start: " + lastState);
                             t = NoteBeamType.Start;
                             lastState = NoteBeamType.Start;
                         }
@@ -119,7 +123,7 @@ namespace DPA_Musicsheets.Utility
                     {
                         if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
                         {
-                            Debug.WriteLine("Continue: " + lastState);
+                            //Debug.WriteLine("Continue: " + lastState);
                             t = NoteBeamType.Continue;
                             lastState = NoteBeamType.Continue;
                         }
@@ -133,7 +137,7 @@ namespace DPA_Musicsheets.Utility
                 {
                     if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
                     {
-                        Debug.WriteLine("End: " + lastState);
+                        //Debug.WriteLine("End: " + lastState);
                         t = NoteBeamType.End;
                         lastState = NoteBeamType.End;
                     }

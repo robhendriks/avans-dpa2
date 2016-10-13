@@ -100,7 +100,7 @@ namespace DPA_Musicsheets
                 if (Meta == null)
                 {
                     Meta = metaBuilder.Create();
-                    Debug.WriteLine(Meta);
+                    //Debug.WriteLine(Meta);
                 }
                 else
                 {

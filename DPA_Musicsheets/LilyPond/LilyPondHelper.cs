@@ -136,7 +136,7 @@ namespace DPA_Musicsheets.LilyPond
                 octave -= 1;
             }
 
-            Debug.WriteLine($"[OCTAVE]\t{noteNote}\t{octave}");
+            //Debug.WriteLine($"[OCTAVE]\t{noteNote}\t{octave}");
 
             return octave;
         }
