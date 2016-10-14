@@ -8,7 +8,27 @@
         xmlns:c="clr-namespace:DPA_Musicsheets.Controls"
         mc:Ignorable="d"
         Icon="{StaticResource nootNoot}"
-        Title="Noot Studio 2 Pro Edition (TRIAL EXPIRING IN 30 DAYS)" Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
+        Title="Noot Studio 2 PRO"
+        Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.InputBindings>
+        <!-- File -->
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewCommand}"/>
+        <KeyBinding Gesture="Ctrl+O" Modifiers="Ctrl" Command="{Binding OpenCommand}"/>
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding ExportCommand}"/>
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
+
+        <!-- Edit -->
+        <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}"/>
+        <KeyBinding Gesture="Ctrl+Shift+Z" Command="{Binding RedoCommand}"/>
+
+        <!-- Insert -->
+        <KeyBinding Gesture="Alt+C" Command="{Binding InsertCommand}" CommandParameter="\clef treble"/>
+        <KeyBinding Gesture="Alt+T" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120"/>
+        <KeyBinding Gesture="Alt+3" Command="{Binding InsertCommand}" CommandParameter="\time 3/4"/>
+        <KeyBinding Gesture="Alt+4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4"/>
+        <KeyBinding Gesture="Alt+6" Command="{Binding InsertCommand}" CommandParameter="\time 6/4"/>
+    </Window.InputBindings>
 
     <Window.Resources>
         <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
@@ -31,14 +51,32 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ToolBarTray Grid.Row="0">
-            <ToolBar>
-                <Button Command="{Binding OpenCommand}" Content="Open"/>
-            </ToolBar>
-            <ToolBar>
-                <Button Command="{Binding TestCommand}" Content="Test"/>
-            </ToolBar>
-        </ToolBarTray>
+        <Menu Grid.Row="0">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New..." Command="{Binding NewCommand}" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_Open..." Command="{Binding OpenCommand}" InputGestureText="Ctrl+O"/>
+                <Separator/>
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
+                <Separator/>
+                <MenuItem Header="_Export" Command="{Binding ExportCommand}" InputGestureText="Ctrl+Shift+S"/>
+                <Separator/>
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" InputGestureText="Alt+F4"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z"/>
+                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Shift+Z"/>
+                <Separator/>
+                <MenuItem Header="_Insert">
+                    <MenuItem Header="_Clef" Command="{Binding InsertCommand}" CommandParameter="\clef treble" InputGestureText="Alt+C"/>
+                    <MenuItem Header="_Time">
+                        <MenuItem Header="_3/4" Command="{Binding InsertCommand}" CommandParameter="\time 3/4" InputGestureText="Alt+3"/>
+                        <MenuItem Header="_4/4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4" InputGestureText="Alt+4"/>
+                        <MenuItem Header="_6/4" Command="{Binding InsertCommand}" CommandParameter="\time 6/4" InputGestureText="Alt+6"/>
+                    </MenuItem>
+                    <MenuItem Header="_Tempo" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120" InputGestureText="Alt+S"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -47,7 +85,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <c:LilyPondEditor Grid.Row="0" Valid="{Binding LilyPondError, Converter={StaticResource datass}}" LilyPond="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></c:LilyPondEditor>
+            <c:LilyPondEditor Grid.Row="0" IsEnabled="{Binding CanEdit}" Valid="{Binding LilyPondError, Converter={StaticResource datass}}" LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></c:LilyPondEditor>
 
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 

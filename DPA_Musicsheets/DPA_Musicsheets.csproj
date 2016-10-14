@@ -83,11 +83,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Editor\Command\Command.cs" />
+    <Compile Include="Editor\Command\ExitCommand.cs" />
+    <Compile Include="Editor\Command\ExportCommand.cs" />
+    <Compile Include="Editor\Command\InsertCommand.cs" />
+    <Compile Include="Editor\Command\NewCommand.cs" />
+    <Compile Include="Editor\Command\OpenCommand.cs" />
+    <Compile Include="Editor\Command\RedoCommand.cs" />
+    <Compile Include="Editor\Command\SaveCommand.cs" />
+    <Compile Include="Editor\Command\UndoCommand.cs" />
+    <Compile Include="Editor\EditableBase.cs" />
+    <Compile Include="Editor\Editor.cs" />
+    <Compile Include="Editor\EditorState.cs" />
+    <Compile Include="Editor\EditorStateContext.cs" />
+    <Compile Include="Editor\IEditable.cs" />
     <Compile Include="Controls\StringToBoolConverter.cs" />
     <Compile Include="Controls\BoolToColorConverter.cs" />
     <Compile Include="Controls\LilyPondEditor.xaml.cs">
       <DependentUpon>LilyPondEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Editor\State\LilyPondState.cs" />
+    <Compile Include="Editor\State\MidiState.cs" />
     <Compile Include="LilyPond\LilyPondException.cs" />
     <Compile Include="LilyPond\LilyPondHelper.cs" />
     <Compile Include="LilyPond\LilyPondLexer.cs" />
@@ -97,12 +113,13 @@
     <Compile Include="Midi\MidiLoadException.cs" />
     <Compile Include="Music\MusicMeta.cs" />
     <Compile Include="Music\MusicMetaBuilder.cs" />
+    <Compile Include="Music\MusicNoteExtensions.cs" />
     <Compile Include="Music\MusicNoteFactory.cs" />
     <Compile Include="Music\MusicTrackBuilder.cs" />
     <Compile Include="Music\MusicPlayer.cs" />
-    <Compile Include="Utility\Editor.cs" />
     <Compile Include="Utility\Memento.cs" />
     <Compile Include="Music\MusicalSymbolFactory.cs" />
+    <Compile Include="Utility\ObservableCollectionExtensions.cs" />
     <Compile Include="Utility\Range.cs" />
     <Compile Include="Utility\StringCollectionExtensions.cs" />
     <Compile Include="Utility\TimeSignature.cs" />
@@ -167,6 +184,7 @@
   <ItemGroup>
     <Resource Include="Images\nootNoot.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

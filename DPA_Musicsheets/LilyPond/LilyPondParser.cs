@@ -1,7 +1,9 @@
 ﻿using DPA_Musicsheets.Music;
+using PSAMControlLibrary;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -32,6 +34,49 @@ namespace DPA_Musicsheets.LilyPond
             Parse();
         }
 
+        public static List<MusicalSymbol> parse(TextReader reader, out string source)
+        {
+            var result = new List<MusicalSymbol>();
+
+            var lexer = new LilyPondLexer(reader);
+            var parser = new LilyPondParser(lexer);
+
+            foreach (var pair in parser.Parameters)
+            {
+                switch (pair.Key)
+                {
+                    case "clef":
+                        if (pair.Value == "treble")
+                        {
+                            result.Add(new Clef(ClefType.GClef, 2));
+                        }
+                        else if (pair.Value == "bass")
+                        {
+                            result.Add(new Clef(ClefType.FClef, 2));
+                        }
+                        else
+                        {
+                            result.Add(new Clef(ClefType.CClef, 2));
+                        }
+                        break;
+                    case "time":
+                        var parts = pair.Value.Split('/');
+
+                        uint beats = uint.Parse(parts[0]);
+                        uint beatType = uint.Parse(parts[1]);
+
+                        result.Add(new TimeSignature(TimeSignatureType.Numbers, beats, beatType));
+                        break;
+                    case "tempo":
+                        break;
+                }
+            }
+
+            source = lexer.Source;
+            var baseNote = (parser.Notes.Count > 2 ? parser.Notes[1] : null);
+            result.Generate(parser.Notes, baseNote);
+            return result;
+        }
 
         private void Parse()
         {
