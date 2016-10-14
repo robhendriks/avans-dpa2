@@ -30,6 +30,19 @@ namespace DPA_Musicsheets.ViewModel
             }
         }
 
+        private string _lilyPond = "";
+
+        public string LilyPond
+        {
+            get { return _lilyPond; }
+            set
+            {
+                _lilyPond = value;
+                RaisePropertyChanged(() => LilyPond);
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
+
         private bool _playing = false;
 
         public bool Playing
@@ -129,9 +142,16 @@ namespace DPA_Musicsheets.ViewModel
 
         private void OpenMidi()
         {
+            var reader = new MidiReader(FileName);
+
+            MusicalSymbols.Add(new Clef(ClefType.GClef, 2));
+            MusicalSymbols.Add(new PSAMControlLibrary.TimeSignature(TimeSignatureType.Numbers,
+                (uint)reader.Meta.TimeSignature.A, (uint)reader.Meta.TimeSignature.B));
+
+            GenerateNotes(reader.Notes, null);
         }
 
-        private void OpenLilyPond()
+        private async void OpenLilyPond()
         {
             var reader = new StreamReader(FileName);
             var lexer = new LilyPond.LilyPondLexer(reader);
@@ -172,19 +192,23 @@ namespace DPA_Musicsheets.ViewModel
 
             var baseNote = (parser.Notes.Count > 2 ? parser.Notes[1] : null);
             GenerateNotes(parser.Notes, baseNote);
+
+            LilyPond = lexer.Source;
         }
 
         private void GenerateNotes(List<MusicNote> notes, MusicNote baseNote = null)
         {
-            int i = 0;
+            int i = 0, il = notes.Count;
             foreach (var note in notes)
             {
+                if (baseNote == null) baseNote = note;
                 if (i == notes.Count - 1) i = notes.Count - 2;
 
                 if (!note.IsRelative)
                 {
-
-                    MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note, notes[i + 1], notes[i - 1]));
+                    MusicalSymbols.Add(MusicalSymbolFactory.Create(baseNote, note,
+                        (i < il ? notes[i + 1] : null),
+                        (i > 0 ? notes[i - 1] : null)));
                     if (note.HasBarLine)
                     {
                         MusicalSymbols.Add(new Barline());

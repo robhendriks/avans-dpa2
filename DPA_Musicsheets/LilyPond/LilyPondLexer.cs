@@ -70,6 +70,8 @@ namespace DPA_Musicsheets.LilyPond
 
         private readonly TextReader reader;
 
+        public string Source { get; private set; }
+
         public LilyPondLexer(TextReader reader)
         {
             if (reader == null)
@@ -82,20 +84,20 @@ namespace DPA_Musicsheets.LilyPond
 
         private IEnumerable<Token> Tokenize()
         {
-            string source = ReadLines().ConcatLines();
+            Source = ReadLines().ConcatLines();
 
             int currentIndex = 0;
             int currentLine = 1;
             int currentColumn = 0;
 
-            while (currentIndex < source.Length)
+            while (currentIndex < Source.Length)
             {
                 TokenDefinition matchedDefinition = null;
                 int matchLength = 0;
 
                 foreach (var rule in Rules)
                 {
-                    var match = rule.Regex.Match(source, currentIndex);
+                    var match = rule.Regex.Match(Source, currentIndex);
 
                     if (match.Success && (match.Index - currentIndex) == 0)
                     {
@@ -107,11 +109,11 @@ namespace DPA_Musicsheets.LilyPond
 
                 if (matchedDefinition == null)
                 {
-                    throw new LilyPondException($"Unrecognized symbol '{source[currentIndex]}' at index {currentIndex} (line {currentLine}, column {currentColumn}).");
+                    throw new LilyPondException($"Unrecognized symbol '{Source[currentIndex]}' at index {currentIndex} (line {currentLine}, column {currentColumn}).");
                 }
                 else
                 {
-                    var value = source.Substring(currentIndex, matchLength);
+                    var value = Source.Substring(currentIndex, matchLength);
 
                     if (!matchedDefinition.IsIgnored)
                     {

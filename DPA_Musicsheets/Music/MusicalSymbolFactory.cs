@@ -49,12 +49,12 @@ namespace DPA_Musicsheets.Utility
                 {
                     n.NumberOfDots = 1;
                 }
-                
+
                 return n;
             }
         }
 
-        private static  NoteStemDirection determineDirection(MusicNote baseNote, MusicNote note)
+        private static NoteStemDirection determineDirection(MusicNote baseNote, MusicNote note)
         {
             NoteStemDirection direction = NoteStemDirection.Up;
             if (baseNote != null)
@@ -107,7 +107,7 @@ namespace DPA_Musicsheets.Utility
                     {
                         if (lastState == NoteBeamType.Single || lastState == NoteBeamType.End)
                         {
-                            Debug.WriteLine("Start: "+ lastState);
+                            Debug.WriteLine("Start: " + lastState);
                             t = NoteBeamType.Start;
                             lastState = NoteBeamType.Start;
                         }
@@ -123,7 +123,7 @@ namespace DPA_Musicsheets.Utility
                             t = NoteBeamType.Continue;
                             lastState = NoteBeamType.Continue;
                         }
-                    }    
+                    }
                 }
             }
 
@@ -137,7 +137,7 @@ namespace DPA_Musicsheets.Utility
                         t = NoteBeamType.End;
                         lastState = NoteBeamType.End;
                     }
-                }   
+                }
             }
 
             return t;
