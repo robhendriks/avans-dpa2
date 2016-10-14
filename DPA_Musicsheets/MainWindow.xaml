@@ -85,7 +85,12 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <c:LilyPondEditor Grid.Row="0" IsEnabled="{Binding CanEdit}" Valid="{Binding LilyPondError, Converter={StaticResource datass}}" LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></c:LilyPondEditor>
+            <c:LilyPondEditor Grid.Row="0" IsEnabled="{Binding CanEdit}"
+                              SelectionStart="{Binding SelectionStart, Mode=OneWayToSource}"
+                              SelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"
+                              Valid="{Binding LilyPondError, Converter={StaticResource datass}}"
+                              LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            </c:LilyPondEditor>
 
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 
@@ -103,7 +108,9 @@
                 <TextBlock Text="{Binding FileName, Mode=OneWay}" />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" />
+                <Border CornerRadius="4,4,4,4" Background="Red">
+                    <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" Foreground="White" />
+                </Border>
             </StatusBarItem>
         </StatusBar>
     </Grid>

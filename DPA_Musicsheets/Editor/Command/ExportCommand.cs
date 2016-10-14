@@ -10,6 +10,7 @@ namespace DPA_Musicsheets.Editor.Command
 
         public override void Execute()
         {
+            Editable.Save();
             Editable.Export();
         }
     }

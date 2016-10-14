@@ -7,20 +7,31 @@ namespace DPA_Musicsheets.Controls
     public partial class LilyPondEditor : UserControl
     {
         public static DependencyProperty ValidProperty
-            = DependencyProperty.Register("Valid", typeof(bool), typeof(LilyPondEditor)
-                , new PropertyMetadata(false));
+            = DependencyProperty.Register("Valid", typeof(bool), typeof(LilyPondEditor),
+                new PropertyMetadata(false));
 
         public static DependencyProperty LilyPondProperty
-            = DependencyProperty.Register("LilyPond", typeof(string), typeof(LilyPondEditor)
-                , new PropertyMetadata("", OnLilyPondPropertyChanged));
+            = DependencyProperty.Register("LilyPond", typeof(string), typeof(LilyPondEditor) ,
+                new PropertyMetadata(""));
 
-        private static void OnLilyPondPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        public static DependencyProperty SelectionStartProperty
+           = DependencyProperty.Register("SelectionStart", typeof(int), typeof(LilyPondEditor),
+               new PropertyMetadata(0));
+
+        public static DependencyProperty SelectionLengthProperty
+           = DependencyProperty.Register("SelectionLength", typeof(int), typeof(LilyPondEditor),
+               new PropertyMetadata(0));
+
+        public int SelectionStart
         {
-            var lilyPondEditor = sender as LilyPondEditor;
-            if (sender != null)
-            {
-                lilyPondEditor.InvalidateLilyPond();
-            }
+            get { return (int)GetValue(SelectionStartProperty); }
+            set { SetValue(SelectionStartProperty, value); }
+        }
+
+        public int SelectionLength
+        {
+            get { return (int)GetValue(SelectionLengthProperty); }
+            set { SetValue(SelectionLengthProperty, value); }
         }
 
         public bool Valid
@@ -40,9 +51,16 @@ namespace DPA_Musicsheets.Controls
             InitializeComponent();
         }
 
-        public void InvalidateLilyPond()
+        private void txtLilyPond_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("I AM HAS ALL YOUR L I L Y P O N D S");
+            if (SelectionStart != txtLilyPond.SelectionStart)
+            {
+                SelectionStart = txtLilyPond.SelectionStart;
+            }
+            if (SelectionLength != txtLilyPond.SelectionLength)
+            {
+                SelectionLength = txtLilyPond.SelectionLength;
+            }
         }
     }
 }

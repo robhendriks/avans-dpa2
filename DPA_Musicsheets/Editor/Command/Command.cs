@@ -6,6 +6,8 @@ namespace DPA_Musicsheets.Editor.Command
 {
     public abstract class Command : ICommand
     {
+        public object Parameter { get; set; }
+
         public readonly IEditable Editable;
 
         public Command(IEditable editable)
@@ -38,6 +40,7 @@ namespace DPA_Musicsheets.Editor.Command
 
         void ICommand.Execute(object parameter)
         {
+            Parameter = parameter;
             Execute();
         }
     }

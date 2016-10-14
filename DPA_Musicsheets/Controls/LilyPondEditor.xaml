@@ -37,7 +37,8 @@
         </Rectangle>
 
         <ScrollViewer DataContext="{Binding ElementName=root}" Grid.Column="2">
-            <TextBox Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox x:Name="txtLilyPond" Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     SelectionChanged="txtLilyPond_SelectionChanged"
                      Background="Transparent" BorderThickness="0"
                      AcceptsTab="True" AcceptsReturn="True"
                      Margin="8 0 8 0">

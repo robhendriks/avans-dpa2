@@ -56,13 +56,13 @@ namespace DPA_Musicsheets.Utility
 
         private static NoteStemDirection determineDirection(MusicNote baseNote, MusicNote note)
         {
-            NoteStemDirection direction = NoteStemDirection.Up;
+            NoteStemDirection direction = NoteStemDirection.Down;
             if (baseNote != null)
             {
                 int baseOctave = baseNote.Octave;
                 if (note.Octave <= baseOctave && LilyPond.LilyPondHelper.Compare(note.Note, MusicNoteNote.B) < 0)
                 {
-                    direction = NoteStemDirection.Down;
+                    direction = NoteStemDirection.Up;
                 }
             }
             return direction;

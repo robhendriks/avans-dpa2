@@ -8,7 +8,7 @@
         void Export();
         void Undo();
         void Redo();
-        void Insert();
+        void Insert(string content);
         void Exit();
     }
 }

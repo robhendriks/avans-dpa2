@@ -1,5 +1,6 @@
 using DPA_Musicsheets.Editor;
 using DPA_Musicsheets.Editor.Command;
+using DPA_Musicsheets.Editor.State;
 using DPA_Musicsheets.LilyPond;
 using DPA_Musicsheets.Music;
 using DPA_Musicsheets.Utility;
@@ -7,10 +8,13 @@ using GalaSoft.MvvmLight;
 using PSAMControlLibrary;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace DPA_Musicsheets.ViewModel
 {
@@ -43,6 +47,10 @@ namespace DPA_Musicsheets.ViewModel
             }
         }
 
+        private readonly Timer timer;
+        private bool timerBusy = false;
+        private bool coldLoad = true;
+
         private string _lilyPondSource;
 
         public string LilyPondSource
@@ -52,6 +60,23 @@ namespace DPA_Musicsheets.ViewModel
             {
                 _lilyPondSource = value;
                 RaisePropertyChanged(() => LilyPondSource);
+                if (!timerBusy && !coldLoad)
+                {
+                    timerBusy = true;
+                    timer.Change(1500, 1500);
+                }
+            }
+        }
+
+        private string _lilyPondError;
+
+        public string LilyPondError
+        {
+            get { return _lilyPondError; }
+            set
+            {
+                _lilyPondError = value;
+                RaisePropertyChanged(() => LilyPondError);
             }
         }
 
@@ -76,10 +101,17 @@ namespace DPA_Musicsheets.ViewModel
             set { _musicalSymbols = value; }
         }
 
+        public int SelectionStart { get; set; }
+        public int SelectionLength { get; set; }
+
         public bool CanEdit => StateContext.CanEdit();
 
         public MainViewModel()
         {
+            var autoEvent = new AutoResetEvent(false);
+
+            timer = new Timer(TimerHandler, autoEvent, Timeout.Infinite, Timeout.Infinite);
+
             Editable = new EditableBase(this);
             StateContext = new EditorStateContext(Editable);
 
@@ -96,10 +128,28 @@ namespace DPA_Musicsheets.ViewModel
                 UndoCommand, RedoCommand, InsertCommand, ExitCommand);
         }
 
+        private static object mutex = new object();
+
+        public void TimerHandler(object state)
+        {
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            timerBusy = false;
+
+            Application.Current.Dispatcher.Invoke(() => ValidateLilyPond(), DispatcherPriority.ContextIdle);
+        }
+
+        public void Reset()
+        {
+            FileName = "";
+            StateContext.State = new LilyPondState();
+            LilyPondSource = LilyPondError = "";
+            MusicalSymbols.Clear();
+        }
+
         public void LoadMidi()
         {
             MusicalSymbols.Clear();
-            LilyPondSource = "";
+            LilyPondSource = LilyPondError = "";
 
             var reader = new MidiReader(FileName);
 
@@ -112,6 +162,10 @@ namespace DPA_Musicsheets.ViewModel
 
         public void LoadLilyPond()
         {
+            coldLoad = true;
+            LilyPondSource = LilyPondError = "";
+            coldLoad = false;
+
             var reader = new StreamReader(FileName);
 
             try
@@ -123,29 +177,48 @@ namespace DPA_Musicsheets.ViewModel
                 LilyPondSource = source;
 
                 MusicalSymbols.AddRange(result);
+
+                LilyPondError = "";
             }
             catch (Exception e)
             {
+                LilyPondError = e.Message;
                 MessageBox.Show(e.Message);
+            }
+            finally
+            {
+                reader.Dispose();
             }
         }
 
-        //private void ValidateLilyPond()
-        //{
-        //    LilyPondError = "";
-        //    var reader = new StringReader(LilyPond);
+        private void ValidateLilyPond()
+        {
+            lock (this)
+            {
+                LilyPondError = "";
+                var reader = new StringReader(LilyPondSource);
 
-        //    try
-        //    {
-        //        MusicalSymbols.Clear();
-        //        ParseLilyPond(reader);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.WriteLine(e.StackTrace);
-        //        LilyPondError = e.Message;
-        //    }
-        //}
+                try
+                {
+                    MusicalSymbols.Clear();
 
+                    string source;
+                    var result = LilyPondParser.parse(reader, out source);
+                    LilyPondSource = source;
+
+                    MusicalSymbols.AddRange(result);
+
+                    LilyPondError = "";
+                }
+                catch (Exception e)
+                {
+                    LilyPondError = e.Message;
+                }
+                finally
+                {
+                    reader.Dispose();
+                }
+            }
+        }
     }
 }

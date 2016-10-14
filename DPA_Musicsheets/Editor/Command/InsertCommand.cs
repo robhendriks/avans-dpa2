@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace DPA_Musicsheets.Editor.Command
 {
@@ -10,7 +11,7 @@ namespace DPA_Musicsheets.Editor.Command
 
         public override void Execute()
         {
-            Editable.Insert();
+            Editable.Insert(Parameter as string);
         }
     }
 }

@@ -6,30 +6,29 @@ namespace DPA_Musicsheets.LilyPond
 {
     public class LilyPondToPDF
     {
-        public static void SaveLilypondToPdf()
+        public static readonly string LilyPondPath = @"C:\Program Files (x86)\LilyPond\usr\bin\lilypond.exe";
+
+        public static void SaveLilypondToPdf(string sourceFileName, string targetFileName)
         {
-            //???????
-            string lilypondLocation = @"C:\Program Files (x86)\LilyPond\usr\bin\lilypond.exe";
-            string sourceFolder = @"c:\temp\";
-            string sourceFileName = "Twee-emmertjes-water-halen";
-            string targetFolder = @"c:\users\mmaaschu\desktop\";
-            string targetFileName = "Test";
+            var fileInfo = new FileInfo(targetFileName);
+            var sourceDirectory = fileInfo.DirectoryName;
 
             var process = new Process
             {
                 StartInfo =
                 {
-                    WorkingDirectory = sourceFolder,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    Arguments = String.Format("--pdf \"{0}{1}\"", sourceFolder, sourceFileName + ".ly"),
-                    FileName = lilypondLocation
+                    WorkingDirectory = sourceDirectory,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    Arguments = $"--pdf -o \"{Path.GetFileNameWithoutExtension(targetFileName)}\" \"{sourceFileName}\"",
+                    FileName = LilyPondPath
                 }
             };
 
-            process.Start();
-            while (!process.HasExited) { /* Wait for exit */ }
+            Debug.WriteLine($"{sourceFileName} -> {targetFileName}");
 
-            File.Copy(sourceFolder + sourceFileName + ".pdf", targetFolder + targetFileName + ".pdf", true);
+            process.Start();
+            process.WaitForExit();
         }
     }
 }
