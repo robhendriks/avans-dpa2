@@ -121,8 +121,6 @@ namespace DPA_Musicsheets.Editor
 
         public void LilyPondToFile(string fileName)
         {
-            Debug.WriteLine("meh savings");
-
             try
             {
                 using (var sw = new StreamWriter(fileName, false))

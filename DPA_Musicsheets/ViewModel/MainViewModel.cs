@@ -62,7 +62,6 @@ namespace DPA_Musicsheets.ViewModel
                 RaisePropertyChanged(() => LilyPondSource);
                 if (!timerBusy && !coldLoad)
                 {
-                    timerBusy = true;
                     timer.Change(1500, 1500);
                 }
             }
@@ -132,10 +131,20 @@ namespace DPA_Musicsheets.ViewModel
 
         public void TimerHandler(object state)
         {
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
-            timerBusy = false;
+            if (timerBusy)
+            {
+                return;
+            }
+            timerBusy = true;
 
-            Application.Current.Dispatcher.Invoke(() => ValidateLilyPond(), DispatcherPriority.ContextIdle);
+            Debug.WriteLine("TICK");
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ValidateLilyPond();
+                timerBusy = false;
+            }, DispatcherPriority.ContextIdle);
         }
 
         public void Reset()
@@ -164,7 +173,6 @@ namespace DPA_Musicsheets.ViewModel
         {
             coldLoad = true;
             LilyPondSource = LilyPondError = "";
-            coldLoad = false;
 
             var reader = new StreamReader(FileName);
 
@@ -183,12 +191,13 @@ namespace DPA_Musicsheets.ViewModel
             catch (Exception e)
             {
                 LilyPondError = e.Message;
-                MessageBox.Show(e.Message);
             }
             finally
             {
                 reader.Dispose();
             }
+
+            coldLoad = false;
         }
 
         private void ValidateLilyPond()
@@ -204,10 +213,8 @@ namespace DPA_Musicsheets.ViewModel
 
                     string source;
                     var result = LilyPondParser.parse(reader, out source);
-                    LilyPondSource = source;
 
                     MusicalSymbols.AddRange(result);
-
                     LilyPondError = "";
                 }
                 catch (Exception e)

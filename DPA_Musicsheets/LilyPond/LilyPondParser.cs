@@ -67,7 +67,7 @@ namespace DPA_Musicsheets.LilyPond
 
                         result.Add(new TimeSignature(TimeSignatureType.Numbers, beats, beatType));
                         break;
-                    case "tempo":
+                    default:
                         break;
                 }
             }
@@ -100,13 +100,17 @@ namespace DPA_Musicsheets.LilyPond
         private void BeginDocument()
         {
             Token token;
-            if ((token = Next()) == null)
+            if ((token = Next()) == null || token.Type == "EOF")
             {
-                throw new LilyPondException("Expected FUNCTION but was EOF");
+                return;
             }
             if (token.Type != "FUNCTION")
             {
-                throw new LilyPondException($"Expected FUNCTION but was {token.Type}");
+                throw Create(token, "RELATIVE", token.Type);
+            }
+            if (token.Value != "\\relative")
+            {
+                throw Create(token, "RELATIVE", token.Type);
             }
 
             BeginFunction();
@@ -119,11 +123,11 @@ namespace DPA_Musicsheets.LilyPond
             // Peek at NOTE
             if ((token = Next()) == null)
             {
-                throw new LilyPondException("Expected NOTE but was EOF");
+                throw Create(token, "NOTE", "EOF");
             }
             if (token.Type != "NOTE")
             {
-                throw new LilyPondException($"Expected NOTE but was {token.Type}");
+                throw Create(token, "NOTE", token.Type);
             }
 
             var relNote = MusicNoteFactory.Create(token);
@@ -133,11 +137,11 @@ namespace DPA_Musicsheets.LilyPond
             // Peek at Curly Brace
             if ((token = Next()) == null)
             {
-                throw new LilyPondException("Expected CURLY_OPEN but was EOF");
+                throw Create(token, "CURLY_OPEN", "EOF");
             }
             if (token.Type != "CURLY_OPEN")
             {
-                throw new LilyPondException($"Expected CURLY_OPEN but was {token.Type}");
+                throw Create(token, "CURLY_OPEN", token.Type);
             }
 
             NextNonCurlyBrace();
@@ -264,11 +268,11 @@ namespace DPA_Musicsheets.LilyPond
             // Peek at Time Signature, Tempo or Clef
             if ((token = Next()) == null)
             {
-                throw new LilyPondException("Expected TIME_SIGNATURE, TEMPO or CLEF but was EOF");
+                throw Create(token, "TIME_SIGNATURE, TEMPO or CLEF", "EOF");
             }
             if (token.Type != "TIME_SIGNATURE" && token.Type != "TEMPO" && token.Type != "CLEF")
             {
-                throw new LilyPondException($"Expected TIME_SIGNATURE, TEMPO or CLEF but was {token.Type}");
+                throw Create(token, "TIME_SIGNATURE, TEMPO or CLEF", token.Type);
             }
 
             string key = parameterName.TrimStart(new char[] {'\\'});
@@ -287,12 +291,17 @@ namespace DPA_Musicsheets.LilyPond
             Token token;
             if ((token = Next()) == null)
             {
-                throw new LilyPondException("Expected CURLY_CLOSE but was EOF");
+                throw Create(token, "CURLY_CLOSE", "EOF");
             }
             if (token.Type != "CURLY_CLOSE")
             {
-                throw new LilyPondException($"Expected CURLY_CLOSE but was {token.Type}");
+                throw Create(token, "CURLY_CLOSE", token.Type);
             }
+        }
+
+        public LilyPondException Create(Token token, string expected, string got)
+        {
+            return new LilyPondException($"Expected {expected} but was {got} at index {token.Position.Index} (line {token.Position.Line}, column {token.Position.Column}).");
         }
 
         public void Dispose()

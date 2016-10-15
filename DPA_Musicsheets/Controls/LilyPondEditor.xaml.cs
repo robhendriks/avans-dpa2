@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,13 +7,9 @@ namespace DPA_Musicsheets.Controls
 {
     public partial class LilyPondEditor : UserControl
     {
-        public static DependencyProperty ValidProperty
-            = DependencyProperty.Register("Valid", typeof(bool), typeof(LilyPondEditor),
-                new PropertyMetadata(false));
-
         public static DependencyProperty LilyPondProperty
             = DependencyProperty.Register("LilyPond", typeof(string), typeof(LilyPondEditor) ,
-                new PropertyMetadata(""));
+                new PropertyMetadata("", OnLilyPondPropertyChanged));
 
         public static DependencyProperty SelectionStartProperty
            = DependencyProperty.Register("SelectionStart", typeof(int), typeof(LilyPondEditor),
@@ -21,6 +18,15 @@ namespace DPA_Musicsheets.Controls
         public static DependencyProperty SelectionLengthProperty
            = DependencyProperty.Register("SelectionLength", typeof(int), typeof(LilyPondEditor),
                new PropertyMetadata(0));
+
+        private static void OnLilyPondPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var lilyPondEditor = sender as LilyPondEditor;
+            if (sender != null)
+            {
+                lilyPondEditor.InvalidateEditor();
+            }
+        }
 
         public int SelectionStart
         {
@@ -34,12 +40,6 @@ namespace DPA_Musicsheets.Controls
             set { SetValue(SelectionLengthProperty, value); }
         }
 
-        public bool Valid
-        {
-            get { return (bool)GetValue(ValidProperty); }
-            set { SetValue(ValidProperty, value); }
-        }
-
         public string LilyPond
         {
             get { return (string)GetValue(LilyPondProperty); }
@@ -49,6 +49,28 @@ namespace DPA_Musicsheets.Controls
         public LilyPondEditor()
         {
             InitializeComponent();
+        }
+
+        private void InvalidateEditor()
+        {
+            SetLines();
+        }
+
+        private void SetLines()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            int lines = txtLilyPond.LineCount;
+            for (int i = 0; i < lines; i++)
+            {
+                sb.Append(i + 1);
+                if (i < lines - 1)
+                {
+                    sb.Append("\n");
+                }
+            }
+
+            txtLines.Text = sb.ToString();
         }
 
         private void txtLilyPond_SelectionChanged(object sender, RoutedEventArgs e)

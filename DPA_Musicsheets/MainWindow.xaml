@@ -37,7 +37,7 @@
         <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
         <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
 
-        <c:StringToBoolConverter x:Key="datass"/>
+        <c:StringToColorConverter x:Key="stringToColor"/>
     </Window.Resources>
 
     <Grid>
@@ -86,11 +86,9 @@
             </Grid.RowDefinitions>
 
             <c:LilyPondEditor Grid.Row="0" IsEnabled="{Binding CanEdit}"
-                              SelectionStart="{Binding SelectionStart, Mode=OneWayToSource}"
-                              SelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"
-                              Valid="{Binding LilyPondError, Converter={StaticResource datass}}"
-                              LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            </c:LilyPondEditor>
+                    SelectionStart="{Binding SelectionStart, Mode=OneWayToSource}"
+                    SelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"
+                    LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
             <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
 
@@ -103,15 +101,12 @@
             </ScrollViewer>
         </Grid>
 
-        <StatusBar Grid.Row="2">
-            <StatusBarItem>
-                <TextBlock Text="{Binding FileName, Mode=OneWay}" />
-            </StatusBarItem>
-            <StatusBarItem>
-                <Border CornerRadius="4,4,4,4" Background="Red">
-                    <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" Foreground="White" />
-                </Border>
-            </StatusBarItem>
-        </StatusBar>
+        <Border Grid.Row="2" DockPanel.Dock="Bottom">
+            <Border.Background>
+                <SolidColorBrush Color="{Binding LilyPondError, Converter={StaticResource stringToColor}}"/>
+            </Border.Background>
+            <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" Margin="6,3,6,3" Foreground="White" />
+        </Border>
+
     </Grid>
 </Window>

@@ -60,7 +60,9 @@ namespace DPA_Musicsheets.LilyPond
             new TokenDefinition("CLEF", @"(treble|bass|alto)"),
             new TokenDefinition("PIPE", @"\|"),
             //new TokenDefinition("REST_NOTE", @"r([\d]+)"),
-            new TokenDefinition("NOTE", @"[\w\d\.\,\']+"),
+            //new TokenDefinition("NOTE", @"[\w\d\.\,\']+"),
+            new TokenDefinition("NOTE", @"([a-g]|r)(is|es)?(\'|\,)?(128|64|32|16|8|4|2|1)(\.)?"),
+            new TokenDefinition("NOTE", @"\b(c[\']*)(?=\W)"),
             new TokenDefinition("TILDE", @"\~")
         };
 

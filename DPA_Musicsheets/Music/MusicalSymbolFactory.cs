@@ -33,6 +33,8 @@ namespace DPA_Musicsheets.Utility
 
         public static MusicalSymbol Create(MusicNote baseNote, MusicNote note, MusicNote nextNote, MusicNote previousNote)
         {
+
+
             if (note.Note == MusicNoteNote.Rest)
             {
                 return new Rest(GetDuration(note.Length));
@@ -41,6 +43,7 @@ namespace DPA_Musicsheets.Utility
             {
                 NoteStemDirection direction = determineDirection(baseNote, note);
                 NoteBeamType beamType = isPair(previousNote, note, nextNote, baseNote);
+                //NoteBeamType beamType = NoteBeamType.Single;
                 NoteTieType tieType = hasTie(previousNote, note, nextNote);
 
                 Note n = new Note(GetNote(note.Note), 0, note.Octave, GetDuration(note.Length), direction, tieType, new List<NoteBeamType>() { beamType });
@@ -97,6 +100,7 @@ namespace DPA_Musicsheets.Utility
 
         public static NoteBeamType isPair(MusicNote previousNote, MusicNote currentNote, MusicNote nextNote, MusicNote baseNote)
         {
+
             NoteBeamType t = NoteBeamType.Single;
             if (currentNote.Length < 8) return t;
             var previous = determineDirection(baseNote, previousNote);
@@ -111,7 +115,7 @@ namespace DPA_Musicsheets.Utility
                     {
                         if (lastState == NoteBeamType.Single || lastState == NoteBeamType.End)
                         {
-                            //Debug.WriteLine("Start: " + lastState);
+                            Debug.WriteLine("Start: " + lastState);
                             t = NoteBeamType.Start;
                             lastState = NoteBeamType.Start;
                         }
@@ -123,7 +127,7 @@ namespace DPA_Musicsheets.Utility
                     {
                         if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
                         {
-                            //Debug.WriteLine("Continue: " + lastState);
+                            Debug.WriteLine("Continue: " + lastState);
                             t = NoteBeamType.Continue;
                             lastState = NoteBeamType.Continue;
                         }
@@ -137,7 +141,7 @@ namespace DPA_Musicsheets.Utility
                 {
                     if (lastState == NoteBeamType.Start || lastState == NoteBeamType.Continue)
                     {
-                        //Debug.WriteLine("End: " + lastState);
+                        Debug.WriteLine("End: " + lastState);
                         t = NoteBeamType.End;
                         lastState = NoteBeamType.End;
                     }

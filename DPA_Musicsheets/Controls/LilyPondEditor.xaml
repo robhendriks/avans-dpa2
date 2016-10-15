@@ -6,46 +6,31 @@
              xmlns:local="clr-namespace:DPA_Musicsheets.Controls"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
+             Background="#1e1e1e"
              x:Name="root">
     <UserControl.Resources>
-        <local:BoolToColorConverter x:Key="converter"/>
-
-        <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
-        <Color x:Key="lightGray" A="255"  R="220" G="220" B="220"/>
-
-        <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
-        <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
-
         <SolidColorBrush x:Key="validBrush" />
     </UserControl.Resources>
 
-    <UserControl.Background>
-        <StaticResource ResourceKey="darkGrayBrush"/>
-    </UserControl.Background>
+    <ScrollViewer DataContext="{Binding ElementName=root}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="24" Width="Auto"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-    <Grid DataContext="{Binding ElementName=root}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="32"/>
-            <ColumnDefinition Width="2"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Foreground="#2b91af" x:Name="txtLines" Margin="3,0,3,0" TextAlignment="Right"/>
 
-        <Rectangle Grid.Column="1">
-            <Rectangle.Fill>
-                <SolidColorBrush Color="{Binding Valid, Converter={StaticResource converter}}"/>
-            </Rectangle.Fill>
-        </Rectangle>
+            <Rectangle Grid.Column="1" Fill="#a5a5a5"/>
 
-        <ScrollViewer DataContext="{Binding ElementName=root}" Grid.Column="2">
-            <TextBox x:Name="txtLilyPond" Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     SelectionChanged="txtLilyPond_SelectionChanged"
-                     Background="Transparent" BorderThickness="0"
-                     AcceptsTab="True" AcceptsReturn="True"
-                     Margin="8 0 8 0">
-                <TextBox.Foreground>
-                    <StaticResource ResourceKey="lightGrayBrush"/>
-                </TextBox.Foreground>
+            <TextBox  Grid.Column="2" x:Name="txtLilyPond" Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         SelectionChanged="txtLilyPond_SelectionChanged"
+                         Background="Transparent" Foreground="#e6e6e6"
+                         BorderThickness="0"
+                         AcceptsTab="True" AcceptsReturn="True"
+                         Margin="8 0 8 0">
             </TextBox>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

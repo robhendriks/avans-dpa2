@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\StringToColorConverter.cs" />
     <Compile Include="Editor\Command\Command.cs" />
     <Compile Include="Editor\Command\ExitCommand.cs" />
     <Compile Include="Editor\Command\ExportCommand.cs" />

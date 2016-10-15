@@ -11,11 +11,14 @@ namespace DPA_Musicsheets.Music
             int i = 0, il = notes.Count;
             foreach (var note in notes)
             {
+
                 if (baseNote == null) baseNote = note;
                 if (i == notes.Count - 1) i = notes.Count - 2;
 
                 if (!note.IsRelative)
                 {
+
+
                     result.Add(MusicalSymbolFactory.Create(baseNote, note,
                         (i < il ? notes[i + 1] : null),
                         (i > 0 ? notes[i - 1] : null)));
