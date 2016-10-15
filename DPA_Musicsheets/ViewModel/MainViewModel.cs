@@ -149,6 +149,8 @@ namespace DPA_Musicsheets.ViewModel
 
         public void Reset()
         {
+            coldLoad = false;
+
             FileName = "";
             StateContext.State = new LilyPondState();
             LilyPondSource = LilyPondError = "";
