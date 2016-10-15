@@ -12,89 +12,94 @@
         Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Window.InputBindings>
         <!-- File -->
-        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewCommand}"/>
-        <KeyBinding Gesture="Ctrl+O" Modifiers="Ctrl" Command="{Binding OpenCommand}"/>
-        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}"/>
-        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding ExportCommand}"/>
-        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}"/>
+        <KeyBinding Gesture="Ctrl+N" Command="{Binding NewCommand}" />
+        <KeyBinding Gesture="Ctrl+O" Modifiers="Ctrl" Command="{Binding OpenCommand}" />
+        <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding ExportCommand}" />
+        <KeyBinding Key="F4" Modifiers="Alt" Command="{Binding ExitCommand}" />
 
         <!-- Edit -->
-        <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}"/>
-        <KeyBinding Gesture="Ctrl+Shift+Z" Command="{Binding RedoCommand}"/>
+        <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}" />
+        <KeyBinding Gesture="Ctrl+Shift+Z" Command="{Binding RedoCommand}" />
 
         <!-- Insert -->
-        <KeyBinding Gesture="Alt+C" Command="{Binding InsertCommand}" CommandParameter="\clef treble"/>
-        <KeyBinding Gesture="Alt+T" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120"/>
-        <KeyBinding Gesture="Alt+3" Command="{Binding InsertCommand}" CommandParameter="\time 3/4"/>
-        <KeyBinding Gesture="Alt+4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4"/>
-        <KeyBinding Gesture="Alt+6" Command="{Binding InsertCommand}" CommandParameter="\time 6/4"/>
+        <KeyBinding Gesture="Alt+C" Command="{Binding InsertCommand}" CommandParameter="\clef treble" />
+        <KeyBinding Gesture="Alt+T" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120" />
+        <KeyBinding Gesture="Alt+3" Command="{Binding InsertCommand}" CommandParameter="\time 3/4" />
+        <KeyBinding Gesture="Alt+4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4" />
+        <KeyBinding Gesture="Alt+6" Command="{Binding InsertCommand}" CommandParameter="\time 6/4" />
     </Window.InputBindings>
 
     <Window.Resources>
-        <Color x:Key="darkGray" A="255"  R="30" G="30" B="30"/>
-        <Color x:Key="lightGray" A="255"  R="220" G="220" B="220"/>
+        <Color x:Key="darkGray" A="255" R="30" G="30" B="30" />
+        <Color x:Key="lightGray" A="255" R="220" G="220" B="220" />
 
-        <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}"/>
-        <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}"/>
+        <SolidColorBrush x:Key="darkGrayBrush" Color="{StaticResource darkGray}" />
+        <SolidColorBrush x:Key="lightGrayBrush" Color="{StaticResource lightGray}" />
 
-        <c:StringToColorConverter x:Key="stringToColor"/>
+        <c:StringToColorConverter x:Key="stringToColor" />
     </Window.Resources>
 
     <Grid>
         <Grid.Background>
-            <StaticResource ResourceKey="darkGrayBrush"/>
+            <StaticResource ResourceKey="darkGrayBrush" />
         </Grid.Background>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
             <MenuItem Header="_File">
-                <MenuItem Header="_New..." Command="{Binding NewCommand}" InputGestureText="Ctrl+N"/>
-                <MenuItem Header="_Open..." Command="{Binding OpenCommand}" InputGestureText="Ctrl+O"/>
-                <Separator/>
-                <MenuItem Header="_Save" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S"/>
-                <Separator/>
-                <MenuItem Header="_Export" Command="{Binding ExportCommand}" InputGestureText="Ctrl+Shift+S"/>
-                <Separator/>
-                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" InputGestureText="Alt+F4"/>
+                <MenuItem Header="_New..." Command="{Binding NewCommand}" InputGestureText="Ctrl+N" />
+                <MenuItem Header="_Open..." Command="{Binding OpenCommand}" InputGestureText="Ctrl+O" />
+                <Separator />
+                <MenuItem Header="_Save" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S" />
+                <Separator />
+                <MenuItem Header="_Export" Command="{Binding ExportCommand}" InputGestureText="Ctrl+Shift+S" />
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" InputGestureText="Alt+F4" />
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z"/>
-                <Separator/>
+                <MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z" />
+                <Separator />
                 <MenuItem Header="_Insert">
-                    <MenuItem Header="_Clef" Command="{Binding InsertCommand}" CommandParameter="\clef treble" InputGestureText="Alt+C"/>
+                    <MenuItem Header="_Clef" Command="{Binding InsertCommand}" CommandParameter="\clef treble"
+                              InputGestureText="Alt+C" />
                     <MenuItem Header="_Time">
-                        <MenuItem Header="_3/4" Command="{Binding InsertCommand}" CommandParameter="\time 3/4" InputGestureText="Alt+3"/>
-                        <MenuItem Header="_4/4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4" InputGestureText="Alt+4"/>
-                        <MenuItem Header="_6/4" Command="{Binding InsertCommand}" CommandParameter="\time 6/4" InputGestureText="Alt+6"/>
+                        <MenuItem Header="_3/4" Command="{Binding InsertCommand}" CommandParameter="\time 3/4"
+                                  InputGestureText="Alt+3" />
+                        <MenuItem Header="_4/4" Command="{Binding InsertCommand}" CommandParameter="\time 4/4"
+                                  InputGestureText="Alt+4" />
+                        <MenuItem Header="_6/4" Command="{Binding InsertCommand}" CommandParameter="\time 6/4"
+                                  InputGestureText="Alt+6" />
                     </MenuItem>
-                    <MenuItem Header="_Tempo" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120" InputGestureText="Alt+S"/>
+                    <MenuItem Header="_Tempo" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120"
+                              InputGestureText="Alt+S" />
                 </MenuItem>
             </MenuItem>
         </Menu>
 
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="3"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <c:LilyPondEditor Grid.Row="0" IsEnabled="{Binding CanEdit}"
-                    SelectionStart="{Binding SelectionStart, Mode=OneWayToSource}"
-                    SelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"
-                    LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                              SelectionStart="{Binding SelectionStart, Mode=OneWayToSource}"
+                              SelectionLength="{Binding SelectionLength, Mode=OneWayToSource}"
+                              LilyPond="{Binding LilyPondSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"/>
+            <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" />
 
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible">
                 <PSAMWPFControl:IncipitViewerWPF x:Name="staff" Symbols="{Binding MusicalSymbols}">
                     <PSAMWPFControl:IncipitViewerWPF.Foreground>
-                        <StaticResource ResourceKey="lightGrayBrush"/>
+                        <StaticResource ResourceKey="lightGrayBrush" />
                     </PSAMWPFControl:IncipitViewerWPF.Foreground>
                 </PSAMWPFControl:IncipitViewerWPF>
             </ScrollViewer>
@@ -102,7 +107,7 @@
 
         <Border Grid.Row="2" DockPanel.Dock="Bottom">
             <Border.Background>
-                <SolidColorBrush Color="{Binding LilyPondError, Converter={StaticResource stringToColor}}"/>
+                <SolidColorBrush Color="{Binding LilyPondError, Converter={StaticResource stringToColor}}" />
             </Border.Background>
             <TextBlock Text="{Binding LilyPondError, Mode=OneWay}" Margin="6,3,6,3" Foreground="White" />
         </Border>

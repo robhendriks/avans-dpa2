@@ -15,21 +15,22 @@
     <ScrollViewer DataContext="{Binding ElementName=root}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="24" Width="Auto"/>
-                <ColumnDefinition Width="1"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition MinWidth="24" Width="Auto" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Foreground="#2b91af" x:Name="txtLines" Margin="3,0,3,0" TextAlignment="Right"/>
+            <TextBlock Grid.Column="0" Foreground="#2b91af" x:Name="txtLines" Margin="3,0,3,0" TextAlignment="Right" />
 
-            <Rectangle Grid.Column="1" Fill="#a5a5a5"/>
+            <Rectangle Grid.Column="1" Fill="#a5a5a5" />
 
-            <TextBox  Grid.Column="2" x:Name="txtLilyPond" Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         SelectionChanged="txtLilyPond_SelectionChanged"
-                         Background="Transparent" Foreground="#e6e6e6"
-                         BorderThickness="0"
-                         AcceptsTab="True" AcceptsReturn="True"
-                         Margin="8 0 8 0">
+            <TextBox Grid.Column="2" x:Name="txtLilyPond"
+                     Text="{Binding LilyPond, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     SelectionChanged="txtLilyPond_SelectionChanged"
+                     Background="Transparent" Foreground="#e6e6e6"
+                     BorderThickness="0"
+                     AcceptsTab="True" AcceptsReturn="True"
+                     Margin="8 0 8 0">
                 <TextBox.CaretBrush>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <LinearGradientBrush.GradientStops>
