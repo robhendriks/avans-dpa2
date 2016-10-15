@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Icon="{StaticResource nootNoot}"
         Title="Noot Studio 2 PRO"
-        Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}">
+        Height="500" Width="525" DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Closed="Window_Closed">
     <Window.InputBindings>
         <!-- File -->
         <KeyBinding Gesture="Ctrl+N" Command="{Binding NewCommand}" />
@@ -20,7 +21,6 @@
 
         <!-- Edit -->
         <KeyBinding Gesture="Ctrl+Z" Command="{Binding UndoCommand}" />
-        <KeyBinding Gesture="Ctrl+Shift+Z" Command="{Binding RedoCommand}" />
 
         <!-- Insert -->
         <KeyBinding Gesture="Alt+C" Command="{Binding InsertCommand}" CommandParameter="\clef treble" />
@@ -79,6 +79,10 @@
                     <MenuItem Header="_Tempo" Command="{Binding InsertCommand}" CommandParameter="\tempo 4=120"
                               InputGestureText="Alt+S" />
                 </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Midi">
+                <MenuItem Header="_Play" Command="{Binding PlayCommand}" />
+                <MenuItem Header="_Stop" Command="{Binding StopCommand}" />
             </MenuItem>
         </Menu>
 

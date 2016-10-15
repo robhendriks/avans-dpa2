@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants.cs" />
     <Compile Include="Controls\StringToColorConverter.cs" />
     <Compile Include="Editor\Command\Command.cs" />
     <Compile Include="Editor\Command\ExitCommand.cs" />
@@ -91,6 +92,8 @@
     <Compile Include="Editor\Command\NewCommand.cs" />
     <Compile Include="Editor\Command\OpenCommand.cs" />
     <Compile Include="Editor\Command\SaveCommand.cs" />
+    <Compile Include="Editor\Command\PlayCommand.cs" />
+    <Compile Include="Editor\Command\StopCommand.cs" />
     <Compile Include="Editor\Command\UndoCommand.cs" />
     <Compile Include="Editor\EditableBase.cs" />
     <Compile Include="Editor\Editor.cs" />

@@ -2,15 +2,17 @@
 {
     public class Editor
     {
-        Command.Command NewCommand;
-        Command.Command OpenCommand;
-        Command.Command SaveCommand;
-        Command.Command ExportCommand;
-        Command.Command UndoCommand;
-        Command.Command InsertCommand;
-        Command.Command ExitCommand;
+        public Command.Command NewCommand { get; private set; }
+        public Command.Command OpenCommand { get; private set; }
+        public Command.Command SaveCommand { get; private set; }
+        public Command.Command ExportCommand { get; private set; }
+        public Command.Command UndoCommand { get; private set; }
+        public Command.Command InsertCommand { get; private set; }
+        public Command.Command ExitCommand { get; private set; }
+        public Command.Command PlayCommand { get; private set; }
+        public Command.Command StopCommand { get; private set; }
 
-        public Editor(Command.Command NewCommand, Command.Command OpenCommand, Command.Command SaveCommand, Command.Command ExportCommand, Command.Command UndoCommand, Command.Command InsertCommand, Command.Command ExitCommand)
+        public Editor(Command.Command NewCommand, Command.Command OpenCommand, Command.Command SaveCommand, Command.Command ExportCommand, Command.Command UndoCommand, Command.Command InsertCommand, Command.Command ExitCommand, Command.Command PlayCommand, Command.Command StopCommand)
         {
             this.NewCommand = NewCommand;
             this.OpenCommand = OpenCommand;
@@ -19,6 +21,8 @@
             this.UndoCommand = UndoCommand;
             this.InsertCommand = InsertCommand;
             this.ExitCommand = ExitCommand;
+            this.PlayCommand = PlayCommand;
+            this.StopCommand = StopCommand;
         }
 
         public void New()
@@ -54,6 +58,16 @@
         public void Exit()
         {
             ExitCommand.Execute();
+        }
+
+        public void Play()
+        {
+            PlayCommand.Execute();
+        }
+
+        public void Stop()
+        {
+            StopCommand.Execute();
         }
     }
 }

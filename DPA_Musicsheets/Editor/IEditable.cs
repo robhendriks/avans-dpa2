@@ -9,5 +9,7 @@
         void Undo();
         void Insert(string content);
         void Exit();
+        void Play();
+        void Stop();
     }
 }

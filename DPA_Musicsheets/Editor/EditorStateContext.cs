@@ -17,6 +17,7 @@ namespace DPA_Musicsheets.Editor
             {
                 _state = value;
                 Editable.ViewModel.RaisePropertyChanged(() => Editable.ViewModel.CanEdit);
+                CommandManager.InvalidateRequerySuggested();
             }
         }
 

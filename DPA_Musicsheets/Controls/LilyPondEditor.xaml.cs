@@ -53,14 +53,27 @@ namespace DPA_Musicsheets.Controls
 
         private void InvalidateEditor()
         {
+
+
             SetLines();
+        }
+
+        private int CountLines()
+        {
+            if (string.IsNullOrEmpty(LilyPond)) return 1;
+            int n = 0;
+            foreach (var c in LilyPond)
+            {
+                if (c == '\n') n++;
+            }
+            return n + 1;
         }
 
         private void SetLines()
         {
             StringBuilder sb = new StringBuilder();
 
-            int lines = txtLilyPond.LineCount;
+            int lines = CountLines();
             for (int i = 0; i < lines; i++)
             {
                 sb.Append(i + 1);

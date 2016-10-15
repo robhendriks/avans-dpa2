@@ -5,7 +5,9 @@ using DPA_Musicsheets.LilyPond;
 using DPA_Musicsheets.Music;
 using DPA_Musicsheets.Utility;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using PSAMControlLibrary;
+using Sanford.Multimedia.Midi;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -23,17 +25,34 @@ namespace DPA_Musicsheets.ViewModel
         public EditableBase Editable { get; set; }
         public Editor.Editor Editor { get; set; }
 
-        public Command NewCommand { get; set; }
-        public Command OpenCommand { get; set; }
-        public Command SaveCommand { get; set; }
-        public Command ExportCommand { get; set; }
-        public Command UndoCommand { get; set; }
-        public Command InsertCommand { get; set; }
-        public Command ExitCommand { get; set; }
+        public Command NewCommand => Editor.NewCommand;
+        public Command OpenCommand => Editor.OpenCommand;
+        public Command SaveCommand => Editor.SaveCommand;
+        public Command ExportCommand => Editor.ExportCommand;
+        public Command UndoCommand => Editor.UndoCommand;
+        public Command InsertCommand => Editor.InsertCommand;
+        public Command ExitCommand => Editor.ExitCommand;
+        public Command PlayCommand => Editor.PlayCommand;
+        public Command StopCommand => Editor.StopCommand;
 
         public readonly EditorStateContext StateContext;
         public bool isSaved;
         public Memento MyMemento;
+
+        private MusicPlayer player = new MusicPlayer();
+
+        private bool _isPlaying = false;
+
+        public bool IsPlaying
+        {
+            get { return _isPlaying;  }
+            set
+            {
+                _isPlaying = value;
+                RaisePropertyChanged(() => IsPlaying);
+                CommandManager.InvalidateRequerySuggested();
+            }
+        }
 
         private string _fileName;
 
@@ -117,19 +136,33 @@ namespace DPA_Musicsheets.ViewModel
             Editable = new EditableBase(this);
             StateContext = new EditorStateContext(Editable);
 
-            ExportCommand = new ExportCommand(Editable);
-            InsertCommand = new InsertCommand(Editable);
-            NewCommand = new NewCommand(Editable);
-            OpenCommand = new OpenCommand(Editable);
-            SaveCommand = new SaveCommand(Editable);
-            UndoCommand = new UndoCommand(Editable);
-            ExitCommand = new ExitCommand(Editable);
-
-            Editor = new Editor.Editor(NewCommand, OpenCommand, SaveCommand, ExportCommand,
-                UndoCommand, InsertCommand, ExitCommand);
+            Editor = new Editor.Editor(
+                new NewCommand(Editable),
+                new OpenCommand(Editable),
+                new SaveCommand(Editable),
+                new ExportCommand(Editable),
+                new UndoCommand(Editable),
+                new InsertCommand(Editable),
+                new ExitCommand(Editable),
+                new PlayCommand(Editable),
+                new StopCommand(Editable));
         }
 
-        private static object mutex = new object();
+        public bool IsMidi => !string.IsNullOrEmpty(FileName) && FileName.EndsWith("mid");
+
+        public void Play()
+        {
+            if (!IsMidi || IsPlaying) return;
+            IsPlaying = true;
+            player.Play(FileName);
+        }
+
+        public void Stop()
+        {
+            if (!IsMidi || !IsPlaying) return;
+            IsPlaying = false;
+            player.Stop();
+        }
 
         public void TimerHandler(object state)
         {

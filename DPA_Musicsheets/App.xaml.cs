@@ -1,4 +1,5 @@
-﻿using DPA_Musicsheets.ViewModel;
+﻿using DPA_Musicsheets;
+using DPA_Musicsheets.ViewModel;
 using System.Windows;
 
 namespace MidiPlayerTest
@@ -11,7 +12,11 @@ namespace MidiPlayerTest
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             var mainViewModel = (Current.Resources["Locator"] as ViewModelLocator).Main;
-            mainViewModel?.ExitCommand.Execute();
+            if (!Constants.IsShuttingDown)
+            {
+                Constants.IsShuttingDown = true;
+                mainViewModel?.ExitCommand.Execute();
+            }
         }
     }
 }

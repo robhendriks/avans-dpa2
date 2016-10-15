@@ -70,6 +70,7 @@ namespace DPA_Musicsheets.Editor
 
         public void New()
         {
+            Stop();
             ViewModel.Reset();
         }
 
@@ -77,6 +78,7 @@ namespace DPA_Musicsheets.Editor
         {
             if (openDialog.ShowDialog() == true)
             {
+                Stop();
                 ViewModel.FileName = openDialog.FileName;
 
                 var fileInfo = new FileInfo(ViewModel.FileName);
@@ -148,6 +150,7 @@ namespace DPA_Musicsheets.Editor
 
         public void Exit()
         {
+            Stop();
             Debug.WriteLine("Exit");
 
             if (!ViewModel.isSaved)
@@ -159,7 +162,18 @@ namespace DPA_Musicsheets.Editor
                 }
             }
 
+            Constants.IsShuttingDown = true;
             Application.Current.Shutdown();
+        }
+
+        public void Play()
+        {
+            ViewModel.Play();
+        }
+
+        public void Stop()
+        {
+            ViewModel.Stop();
         }
     }
 }
