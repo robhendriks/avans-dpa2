@@ -1,5 +1,6 @@
 ﻿using DPA_Musicsheets.Editor.State;
 using DPA_Musicsheets.LilyPond;
+using DPA_Musicsheets.Utility;
 using DPA_Musicsheets.ViewModel;
 using Microsoft.Win32;
 using System;
@@ -94,11 +95,6 @@ namespace DPA_Musicsheets.Editor
             }
         }
 
-        public void Redo()
-        {
-            Debug.WriteLine("Redo");
-        }
-
         public void Save()
         {
             if (ViewModel.CanEdit)
@@ -127,6 +123,7 @@ namespace DPA_Musicsheets.Editor
                 {
                     sw.WriteLine(ViewModel.LilyPondSource);
                     sw.Flush();
+                    ViewModel.isSaved = true;
                 }
             }
             catch (IOException e)
@@ -137,12 +134,32 @@ namespace DPA_Musicsheets.Editor
 
         public void Undo()
         {
-            Debug.WriteLine("Undo");
+            Debug.WriteLine("Undoing");
+            if (!string.IsNullOrEmpty(ViewModel.MyMemento.LilypondContent))
+            {
+                Debug.WriteLine(ViewModel.MyMemento.LilypondContent);
+                ViewModel.LilyPondSource = ViewModel.MyMemento.LilypondContent;
+            }
+            else
+            {
+                MessageBox.Show("No previous valid Lilypond to go back to.");
+            }
         }
 
         public void Exit()
         {
             Debug.WriteLine("Exit");
+
+            if (!ViewModel.isSaved)
+            {
+                MessageBoxResult result = MessageBox.Show("Wijzigingen opslaan?", "Noot Studio 2 PRO", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Save();
+                }
+            }
+
+            Application.Current.Shutdown();
         }
     }
 }

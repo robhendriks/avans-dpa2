@@ -64,7 +64,6 @@
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Undo" Command="{Binding UndoCommand}" InputGestureText="Ctrl+Z"/>
-                <MenuItem Header="_Redo" Command="{Binding RedoCommand}" InputGestureText="Ctrl+Shift+Z"/>
                 <Separator/>
                 <MenuItem Header="_Insert">
                     <MenuItem Header="_Clef" Command="{Binding InsertCommand}" CommandParameter="\clef treble" InputGestureText="Alt+C"/>

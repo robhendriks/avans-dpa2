@@ -90,7 +90,6 @@
     <Compile Include="Editor\Command\InsertCommand.cs" />
     <Compile Include="Editor\Command\NewCommand.cs" />
     <Compile Include="Editor\Command\OpenCommand.cs" />
-    <Compile Include="Editor\Command\RedoCommand.cs" />
     <Compile Include="Editor\Command\SaveCommand.cs" />
     <Compile Include="Editor\Command\UndoCommand.cs" />
     <Compile Include="Editor\EditableBase.cs" />

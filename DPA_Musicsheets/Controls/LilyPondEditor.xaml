@@ -30,6 +30,14 @@
                          BorderThickness="0"
                          AcceptsTab="True" AcceptsReturn="True"
                          Margin="8 0 8 0">
+                <TextBox.CaretBrush>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStop Color="White" Offset="0" />
+                            <GradientStop Color="White" Offset="1" />
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </TextBox.CaretBrush>
             </TextBox>
         </Grid>
     </ScrollViewer>

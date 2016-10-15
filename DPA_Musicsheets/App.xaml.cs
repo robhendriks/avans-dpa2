@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DPA_Musicsheets.ViewModel;
 using System.Windows;
 
 namespace MidiPlayerTest
@@ -13,6 +8,10 @@ namespace MidiPlayerTest
     /// </summary>
     public partial class App : Application
     {
-        
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            var mainViewModel = (Current.Resources["Locator"] as ViewModelLocator).Main;
+            mainViewModel?.ExitCommand.Execute();
+        }
     }
 }

@@ -28,11 +28,12 @@ namespace DPA_Musicsheets.ViewModel
         public Command SaveCommand { get; set; }
         public Command ExportCommand { get; set; }
         public Command UndoCommand { get; set; }
-        public Command RedoCommand { get; set; }
         public Command InsertCommand { get; set; }
         public Command ExitCommand { get; set; }
 
         public readonly EditorStateContext StateContext;
+        public bool isSaved;
+        public Memento MyMemento;
 
         private string _fileName;
 
@@ -62,6 +63,7 @@ namespace DPA_Musicsheets.ViewModel
                 RaisePropertyChanged(() => LilyPondSource);
                 if (!timerBusy && !coldLoad)
                 {
+                    isSaved = false;
                     timer.Change(1500, 1500);
                 }
             }
@@ -108,7 +110,8 @@ namespace DPA_Musicsheets.ViewModel
         public MainViewModel()
         {
             var autoEvent = new AutoResetEvent(false);
-
+            isSaved = true;
+            MyMemento = new Memento();
             timer = new Timer(TimerHandler, autoEvent, Timeout.Infinite, Timeout.Infinite);
 
             Editable = new EditableBase(this);
@@ -118,20 +121,19 @@ namespace DPA_Musicsheets.ViewModel
             InsertCommand = new InsertCommand(Editable);
             NewCommand = new NewCommand(Editable);
             OpenCommand = new OpenCommand(Editable);
-            RedoCommand = new RedoCommand(Editable);
             SaveCommand = new SaveCommand(Editable);
             UndoCommand = new UndoCommand(Editable);
             ExitCommand = new ExitCommand(Editable);
 
             Editor = new Editor.Editor(NewCommand, OpenCommand, SaveCommand, ExportCommand,
-                UndoCommand, RedoCommand, InsertCommand, ExitCommand);
+                UndoCommand, InsertCommand, ExitCommand);
         }
 
         private static object mutex = new object();
 
         public void TimerHandler(object state)
         {
-            if (timerBusy)
+            if (timerBusy || !CanEdit)
             {
                 return;
             }
@@ -150,6 +152,7 @@ namespace DPA_Musicsheets.ViewModel
         public void Reset()
         {
             coldLoad = false;
+            isSaved = true;
 
             FileName = "";
             StateContext.State = new LilyPondState();
@@ -174,6 +177,7 @@ namespace DPA_Musicsheets.ViewModel
         public void LoadLilyPond()
         {
             coldLoad = true;
+            isSaved = true;
             LilyPondSource = LilyPondError = "";
 
             var reader = new StreamReader(FileName);
@@ -218,6 +222,7 @@ namespace DPA_Musicsheets.ViewModel
 
                     MusicalSymbols.AddRange(result);
                     LilyPondError = "";
+                    MyMemento.LilypondContent = LilyPondSource;
                 }
                 catch (Exception e)
                 {

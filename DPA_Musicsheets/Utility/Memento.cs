@@ -8,11 +8,6 @@ namespace DPA_Musicsheets.Utility
 {
     public class Memento
     {
-        public readonly string LilypondContent;
-
-        public Memento(string lilypondContent)
-        {
-            LilypondContent = lilypondContent;
-        }
+        public string LilypondContent { get; set; }
     }
 }
