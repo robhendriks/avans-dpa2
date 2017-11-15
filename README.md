@@ -1,3 +1,3 @@
 # dpa
 
-DPA eindopdracht. Wat een pure troep.
+DPA eindopdracht.
